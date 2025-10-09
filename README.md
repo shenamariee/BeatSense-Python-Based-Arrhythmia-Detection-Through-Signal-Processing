@@ -1,1 +1,1 @@
-# BeatSense-ECG-Signal-Processing-in-Detecting-Arrhythmia-using-Python
+# BeatSense - Python-Based Arrhythmia Detection Through Signal Processing
