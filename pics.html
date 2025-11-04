@@ -11,7 +11,7 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
 .hero-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
 .section-title { font-size: 2.25rem; font-weight: 800; text-align: center; color: #1e3a8a; margin-bottom: 1rem; }
 .section-subtitle { font-size: 1.25rem; color: #2563eb; text-align: center; margin-bottom: 2rem; max-width: 36rem; margin-left: auto; margin-right: auto;}
-.card { background: white; border-radius: 0.75rem; box-shadow: 0 2px 8px #e5e7eb; padding: 1.5rem; transition: 0.3s; }
+.card { background: white; border-radius: 0.75rem; box-shadow: 0 2px 8px #e5e7eb; padding: 1.5rem; transition: 0.3s; height: 100%; }
 .card:hover { transform: translateY(-0.5rem);}
 .upload-area {
 border: 4px dashed #3b82f6; border-radius: 1rem;
@@ -90,11 +90,13 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
 <p class="text-lg text-gray-600">BeatSense employs Python-based digital signal processing and machine learning to automate ECG segmentation and classification, accurately detecting arrhythmias at scale and helping clinicians save more lives.</p>
 </div>
 </div>
-<div class="bg-gray-100 p-8 rounded-2xl shadow-inner">
+<!-- Image provided by user -->
+<div class="bg-gray-100 p-8 rounded-2xl shadow-inner mt-16">
 <img 
   src="https://i.imgur.com/rRWcRJy.png" 
   alt="BeatSense Research Framework" 
   class="w-full max-w-4xl mx-auto rounded-2xl shadow-lg transition-transform duration-300 hover:scale-[1.02]"
+  onerror="this.src='https://placehold.co/1000x600/e2e8f0/475569?text=Research+Framework+Chart'"
 />
 </div>
 </div>
@@ -104,35 +106,45 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
 <section id="methodology" class="py-24 bg-gray-50">
 <div class="container mx-auto px-6">
 <h2 class="section-title">Our Methodology</h2>
-<p class="section-subtitle">A formal, quantitative research design structured into six key phases to build and validate the system.</p>
-<div class="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+<p class="section-subtitle">Our system follows a precise flowchart to analyze and classify ECG signals based on established clinical rules.</p>
+<div class="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1 -->
 <div class="relative card !p-8 pt-10" data-phase="1">
-<h4 class="font-bold text-xl text-gray-800 mb-2">Data Acquisition</h4>
-<p>ECG recordings from the MIT-BIH Arrhythmia Database, an industry standard annotated dataset.</p>
+<h4 class="font-bold text-xl text-gray-800 mb-2">Signal Acquisition & Preprocessing</h4>
+<p>Acquire the raw ECG signal input and apply digital noise filtering to prepare it for analysis.</p>
 </div>
+<!-- Card 2 -->
 <div class="relative card !p-8 pt-10" data-phase="2">
-<h4 class="font-bold text-xl text-gray-800 mb-2">Preprocessing</h4>
-<p>Applying digital filters to remove noise and segment signals into analyzable heartbeats.</p>
+<h4 class="font-bold text-xl text-gray-800 mb-2">Feature Extraction (R-Peak)</h4>
+<p>Perform R-peak detection and signal segmentation to isolate individual heartbeats and calculate RR intervals.</p>
 </div>
+<!-- Card 3 -->
 <div class="relative card !p-8 pt-10" data-phase="3">
-<h4 class="font-bold text-xl text-gray-800 mb-2">Feature Extraction</h4>
-<p>Detecting R-peaks, calculating RR intervals and waveform morphology to define rhythms.</p>
+<h4 class="font-bold text-xl text-gray-800 mb-2">Rhythm Analysis</h4>
+<p>First-level check: The system analyzes RR intervals to determine if the heart rhythm is 'Regular' or 'Irregular'.</p>
 </div>
+<!-- Card 4 -->
 <div class="relative card !p-8 pt-10" data-phase="4">
-<h4 class="font-bold text-xl text-gray-800 mb-2">Classification</h4>
-<p>Machine learning algorithms categorizing beats as normal or arrhythmic (e.g., bradycardia, tachycardia).</p>
+<h4 class="font-bold text-xl text-gray-800 mb-2">Heart Rate Classification</h4>
+<p>Second-level check: Determine heart rate to classify as Normal (60-100 bpm), Bradycardia (&lt; 60 bpm), or Tachycardia (&gt; 100 bpm).</p>
 </div>
+<!-- 
+  UPDATED METHODOLOGY CARD 5
+  The content of this card has been updated to include the specific Tachycardia types.
+-->
 <div class="relative card !p-8 pt-10" data-phase="5">
-<h4 class="font-bold text-xl text-gray-800 mb-2">Program Implementation</h4>
-<p>Built using Python with NumPy, SciPy, and Scikit-Learn libraries for signal and machine learning tasks.</p>
+<h4 class="font-bold text-xl text-gray-800 mb-2">Tachycardia Classification</h4>
+<p>If Tachycardia (&gt; 100 bpm) is detected, it is further classified into types like Atrial Fibrillation, Atrial Flutter, Ventricular Tachycardia, Ventricular Fibrillation, and Supraventricular Tachycardia.</p>
 </div>
+<!-- Card 6 -->
 <div class="relative card !p-8 pt-10" data-phase="6">
-<h4 class="font-bold text-xl text-gray-800 mb-2">Performance Evaluation</h4>
-<p>Validation via accuracy and precision metrics benchmarked against expert annotations.</p>
+<h4 class="font-bold text-xl text-gray-800 mb-2">System Output & Recommendation</h4>
+<p>Generate a final analysis (e.g., 'Normal Sinus Rhythm') and a clear recommendation, such as 'Referral to Cardiologist' for detected arrhythmias.</p>
 </div>
 </div>
 </div>
 </section>
+<!-- End of updated section -->
 
 <section id="live-demo" class="py-24 bg-blue-50">
 <div class="container mx-auto px-6">
@@ -195,23 +207,7 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
 </div>
 <button id="analyze-button" class="w-full bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Analyze ECG Signal</button>
 </div>
-</div>
-</section>
-
-<section id="patient-upload" class="py-24 bg-gradient-to-r from-blue-50 to-blue-100">
-<div class="container mx-auto px-6 max-w-3xl text-center">
-<h2 class="section-title text-blue-700">Upload Your ECG Reading</h2>
-<p class="section-subtitle text-blue-600 mb-8">Upload your ECG file (in .mat, .csv, or .txt) for on-the-spot analysis.</p>
-<label for="ecg-upload" class="upload-area" tabindex="0" role="button">
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 12l5-5m0 0l5 5m-5-5v12" /></svg>
-<span>Click to select or drag your <span class="underline decoration-blue-600">ECG file</span> here</span>
-<input type="file" id="ecg-upload" accept=".mat,.csv,.txt" />
-</label>
-<button id="upload-analyze-button" class="w-full mt-6 bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Analyze Uploaded ECG</button>
-<p id="upload-feedback" class="mt-4 text-sm text-blue-700 min-h-[1.25rem]"></p>
-</div>
-</section>
-
+<!-- Results Area -->
 <div id="results-area" class="max-w-4xl mx-auto mt-12 hidden">
 <div id="loader-container" class="text-center">
 <div class="loader mx-auto"></div>
@@ -220,7 +216,8 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
 <div id="report-container" class="hidden">
 <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Analysis Complete: Results</h3>
 <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-200 overflow-hidden">
-<div id="chart-container" class="bg-white rounded-lg shadow-md mb-8 w-full overflow-hidden"></div>
+<!-- Chart will be injected here -->
+<div id="chart-container" class="bg-white rounded-lg shadow-inner border border-gray-100 mb-8 w-full overflow-hidden"></div>
 <div class="grid md:grid-cols-2 gap-8 items-center">
 <div class="space-y-4">
 <div class="pb-3 border-b border-gray-200">
@@ -242,6 +239,7 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
 <p id="result-classification" class="font-bold text-lg text-gray-800"></p>
 </div>
 </div>
+<!-- Recommendation Box -->
 <div id="result-recommendation" class="p-6 rounded-xl text-center">
 <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
 <h4 id="recommendation-title" class="text-xl font-bold"></h4>
@@ -251,61 +249,83 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
 </div>
 </div>
 </div>
+</div>
+</section>
+
+<section id="patient-upload" class="py-24 bg-gradient-to-r from-blue-50 to-blue-100">
+<div class="container mx-auto px-6 max-w-3xl text-center">
+<h2 class="section-title text-blue-700">Upload Your ECG Reading</h2>
+<p class="section-subtitle text-blue-600 mb-8">Upload your ECG file (in .mat, .csv, or .txt) for on-the-spot analysis.</p>
+<label for="ecg-upload" class="upload-area" tabindex="0" role="button">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 12l5-5m0 0l5 5m-5-5v12" /></svg>
+<span>Click to select or drag your <span class="underline decoration-blue-600">ECG file</span> here</span>
+<input type="file" id="ecg-upload" accept=".mat,.csv,.txt" />
+</label>
+<button id="upload-analyze-button" class="w-full mt-6 bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Analyze Uploaded ECG</button>
+<p id="upload-feedback" class="mt-4 text-sm text-blue-700 min-h-[1.25rem]"></p>
+</div>
+</section>
+
 
 <section id="team" class="py-24 bg-white">
 <div class="container mx-auto px-6">
 <h2 class="section-title">The Research Team</h2>
 <p class="section-subtitle">Meet the dedicated team advancing BeatSense.</p>
 <div class="max-w-5xl mx-auto grid sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+<!-- Team Member Card -->
 <div class="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl hover:scale-105 transition-all duration-300">
 <div class="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden shadow-inner border border-gray-200">
-<!-- Shena Marie Espelita Image - FULL Base64 Data Embedded -->
 <img 
-    src="https://i.imgur.com/GSzk4yO.jpeg"
-    alt="Shena Marie Espelita"
-    class="w-full h-full object-cover"
+  src="https://i.imgur.com/GSzk4yO.jpeg"
+  alt="Shena Marie Espelita" 
+  class="w-full h-full object-cover"
+  onerror="this.src='https://placehold.co/96x96/e0e7ff/3730a3?text=SM'"
 />
 </div>
 <h3 class="text-xl font-bold text-gray-800">Shena Marie Espelita</h3>
 <p class="text-blue-600 font-medium">Project Researcher</p>
 </div>
+<!-- Team Member Card -->
 <div class="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl hover:scale-105 transition-all duration-300">
 <div class="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden shadow-inner border border-gray-200">
-<!-- Jashley Mae Alcances Image - FULL Base64 Data Embedded -->
 <img 
-    src="https://i.imgur.com/IkUCRe5.jpeg" 
-    alt="Jashley Mae Alcances" 
-    class="w-full h-full object-cover"
+  src="https://i.imgur.com/IkUCRe5.jpeg" 
+  alt="Jashley Mae Alcances" 
+  class="w-full h-full object-cover"
+  onerror="this.src='https://placehold.co/96x96/e0e7ff/3730a3?text=JA'"
 />
 </div>
 <h3 class="text-xl font-bold text-gray-800">Jashley Mae Alcances</h3>
 <p class="text-blue-600 font-medium">Project Researcher</p>
 </div>
+<!-- Team Member Card -->
 <div class="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl hover:scale-105 transition-all duration-300">
 <div class="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden shadow-inner border border-gray-200">
-<!-- Ylona Leigh Balahadia Image - FULL Base64 Data Embedded -->
 <img 
-    src="https://i.imgur.com/pSV6VoE.jpeg" 
+  src="https://i.imgur.com/pSV6VoE.jpeg" 
   alt="Ylona Leigh Balahadia" 
   class="w-full h-full object-cover"
+  onerror="this="src='https://placehold.co/96x96/e0e7ff/3730a3?text=YB'"
 />
 </div>
 <h3 class="text-xl font-bold text-gray-800">Ylona Leigh Balahadia</h3>
 <p class="text-blue-600 font-medium">Project Researcher</p>
 </div>
+<!-- Team Member Card -->
 <div class="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl hover:scale-105 transition-all duration-300">
 <div class="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden shadow-inner border border-gray-200">
-<!-- Mhekyla Ramirez Image - FULL Base64 Data Embedded -->
 <img 
-    src="https://i.imgur.com/qB6204N.jpeg"
-    alt="Mhekyla Ramirez"
-    class="w-full h-full object-cover"
+  src="https://i.imgur.com/qB6204N.jpeg"
+  alt="Mhekyla Ramirez"
+  class="w-full h-full object-cover"
+  onerror="this.src='https://placehold.co/96x96/e0e7ff/3730a3?text=MR'"
 />
 </div>
 <h3 class="text-xl font-bold text-gray-800">Mhekyla Ramirez</h3>
 <p class="text-blue-600 font-medium">Project Researcher</p>
 </div>
 </div>
+<!-- Advisor Card -->
 <div class="text-center">
 <div class="inline-block bg-green-50 border border-green-200 rounded-xl shadow-md p-6 text-center !px-10">
 <div class="w-24 h-24 rounded-full mx-auto mb-4 bg-green-100 flex items-center justify-center">
@@ -327,6 +347,29 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
 </footer>
 
 <script>
+// JavaScript for mobile menu toggle
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+// JavaScript for smooth scrolling
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', e => {
+e.preventDefault();
+// Hide mobile menu on link click
+if (!mobileMenu.classList.contains('hidden')) {
+  mobileMenu.classList.add('hidden');
+}
+const targetElement = document.querySelector(anchor.getAttribute('href'));
+if (targetElement) {
+  targetElement.scrollIntoView({ behavior: 'smooth' });
+}
+});
+});
+
+// --- Demo Interaction Logic ---
+
+// Get DOM elements
 const recordSelect = document.getElementById('ecg-record-select');
 const analyzeButton = document.getElementById('analyze-button');
 const uploadAnalyzeButton = document.getElementById('upload-analyze-button');
@@ -344,13 +387,16 @@ const resultRecommendation = document.getElementById('result-recommendation');
 const recommendationTitle = document.getElementById('recommendation-title');
 const recommendationText = document.getElementById('recommendation-text');
 
+// Event listener for dropdown selection
 recordSelect.addEventListener('change', () => {
 analyzeButton.disabled = !recordSelect.value;
+// Reset file upload if dropdown is used
 uploadAnalyzeButton.disabled = true;
 uploadFeedback.textContent = '';
 ecgUpload.value = '';
 });
 
+// Event listener for file upload
 ecgUpload.addEventListener('change', () => {
 const file = ecgUpload.files[0];
 if (!file) {
@@ -363,6 +409,7 @@ const isValid = validExts.some(ext => file.name.toLowerCase().endsWith(ext));
 if (isValid) {
 uploadFeedback.textContent = `Selected file: ${file.name}`;
 uploadAnalyzeButton.disabled = false;
+// Reset dropdown if file upload is used
 analyzeButton.disabled = true;
 recordSelect.value = '';
 } else {
@@ -371,6 +418,9 @@ uploadAnalyzeButton.disabled = true;
 }
 });
 
+/**
+* Clears all previous results from the report card.
+*/
 function clearResults() {
 resultFileName.textContent = '';
 resultBpm.textContent = '';
@@ -378,11 +428,15 @@ resultRhythm.textContent = '';
 resultClassification.textContent = '';
 recommendationTitle.textContent = '';
 recommendationText.textContent = '';
-chartContainer.innerHTML = '';
-resultRecommendation.className = 'p-6 rounded-xl text-center';
+chartContainer.innerHTML = ''; // Clear the chart
+resultRecommendation.className = 'p-6 rounded-xl text-center'; // Reset recommendation box style
 loadResults(false);
 }
 
+/**
+* Toggles the visibility of the loader and report containers.
+* @param {boolean} loading - True to show loader, false to show report.
+*/
 function loadResults(loading) {
 if (loading) {
 resultsArea.classList.remove('hidden');
@@ -394,33 +448,52 @@ reportContainer.classList.remove('hidden');
 }
 }
 
+/**
+* A simple promise-based delay function.
+* @param {number} ms - The number of milliseconds to wait.
+*/
 function delay(ms) {
 return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+/**
+* Simulates running the analysis.
+* @param {string} name - The name of the file being analyzed.
+*/
 async function runAnalysis(name) {
 clearResults();
 resultsArea.classList.remove('hidden');
-loadResults(true);
+loadResults(true); // Show loader
 analyzeButton.disabled = true;
 uploadAnalyzeButton.disabled = true;
+
+// Simulate processing time
 await delay(2500);
+
+// Generate a placeholder ECG chart
 generateEcgChart();
 
+// --- Mock Data Generation ---
+// This section creates random results for demo purposes.
 const randomCase = Math.random();
 let bpm, rhythm, classification, recTitle, recText, recColorClass, recTextColorClass;
-if(randomCase < 0.33){
-bpm = (Math.random()*40+101).toFixed(1);
+
+if (randomCase < 0.33) {
+// Case 1: Tachycardia (Fast)
+bpm = (Math.random() * 40 + 101).toFixed(1); // 101.0 - 141.0
 rhythm = 'Irregular';
-classification = 'Tachycardia';
+// Pick one of the specific Tachycardias
+const tachyTypes = ['Atrial Fibrillation', 'Ventricular Tachycardia', 'Atrial Flutter', 'Ventricular Fibrillation', 'Supraventricular Tachycardia'];
+classification = tachyTypes[Math.floor(Math.random() * tachyTypes.length)];
 recTitle = 'Recommendation';
 recText = 'The analysis indicates a significant arrhythmia. It is strongly recommended to refer the case to a cardiologist for further evaluation.';
 recColorClass = 'bg-red-50 border-l-4 border-red-500';
 recTextColorClass = 'text-red-900';
 resultBpm.className = 'font-bold text-xl text-red-600';
 resultRhythm.className = 'font-bold text-xl text-red-600';
-} else if(randomCase < 0.66) {
-bpm = (Math.random()*15+45).toFixed(1);
+} else if (randomCase < 0.66) {
+// Case 2: Bradycardia (Slow)
+bpm = (Math.random() * 15 + 45).toFixed(1); // 45.0 - 60.0
 rhythm = 'Regular';
 classification = 'Bradycardia';
 recTitle = 'Recommendation';
@@ -430,7 +503,8 @@ recTextColorClass = 'text-yellow-900';
 resultBpm.className = 'font-bold text-xl text-yellow-600';
 resultRhythm.className = 'font-bold text-xl text-yellow-600';
 } else {
-bpm = (Math.random()*40+60).toFixed(1);
+// Case 3: Normal
+bpm = (Math.random() * 40 + 60).toFixed(1); // 60.0 - 100.0
 rhythm = 'Regular';
 classification = 'Normal Sinus Rhythm';
 recTitle = 'All Clear';
@@ -440,24 +514,34 @@ recTextColorClass = 'text-green-900';
 resultBpm.className = 'font-bold text-xl text-green-600';
 resultRhythm.className = 'font-bold text-xl text-green-600';
 }
+// --- End Mock Data Generation ---
+
+// Populate the results card
 resultFileName.textContent = name;
 resultBpm.innerHTML = `${bpm} <span class="text-base font-normal text-gray-600">bpm</span>`;
 resultRhythm.textContent = rhythm;
 resultClassification.textContent = classification;
 recommendationTitle.textContent = recTitle;
 recommendationText.textContent = recText;
+// Apply conditional styling to the recommendation box
 resultRecommendation.className = `p-6 rounded-xl text-center ${recColorClass}`;
 recommendationTitle.className = `text-xl font-bold ${recTextColorClass}`;
 recommendationText.className = `mt-2 ${recTextColorClass.replace('900','800')}`;
 resultRecommendation.querySelector('svg').className = `w-16 h-16 mx-auto mb-4 ${recTextColorClass.replace('900','500')}`;
-loadResults(false);
+
+loadResults(false); // Hide loader, show report
+
+// Re-enable buttons
 analyzeButton.disabled = !recordSelect.value;
 uploadAnalyzeButton.disabled = !(ecgUpload.files.length > 0);
 }
 
+/**
+* Generates a simple SVG placeholder for the ECG chart.
+*/
 function generateEcgChart() {
 const chartSVG = `
-<svg viewBox="0 0 800 300" class="w-full h-auto" preserveAspectRatio="xMidYMid meet">
+<svg viewBox="0 0 800 300" class="w-full h-auto" preserveAspectRatio="xMidYMid meet" aria-label="A stylized ECG waveform graph">
 <defs>
 <pattern id="grid-minor" width="10" height="10" patternUnits="userSpaceOnUse">
 <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#fecaca" stroke-width="0.5"/>
@@ -479,28 +563,22 @@ t20,0 l50,0 l21,0"/>
 chartContainer.innerHTML = chartSVG;
 }
 
+// Event listener for the "Analyze" button (dropdown)
 analyzeButton.addEventListener('click', () => {
 runAnalysis(`${recordSelect.value}.mat`);
+// Scroll to the results area
 document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
 });
+
+// Event listener for the "Analyze Uploaded ECG" button
 uploadAnalyzeButton.addEventListener('click', () => {
 if (ecgUpload.files.length > 0) {
 runAnalysis(ecgUpload.files[0].name);
+// Scroll to the results area
 document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
 }
-});
-
-const mobileMenuButton = document.getElementById('mobile-menu-button');
-const mobileMenu = document.getElementById('mobile-menu');
-mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
-
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-anchor.addEventListener('click', e => {
-e.preventDefault();
-mobileMenu.classList.add('hidden');
-document.querySelector(anchor.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
-});
 });
 </script>
 </body>
 </html>
+
