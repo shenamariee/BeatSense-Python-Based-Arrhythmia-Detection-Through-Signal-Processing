@@ -13,6 +13,31 @@ body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
 .section-subtitle { font-size: 1.25rem; color: #2563eb; text-align: center; margin-bottom: 2rem; max-width: 36rem; margin-left: auto; margin-right: auto;}
 .card { background: white; border-radius: 0.75rem; box-shadow: 0 2px 8px #e5e7eb; padding: 1.5rem; transition: 0.3s; height: 100%; }
 .card:hover { transform: translateY(-0.5rem);}
+.method-card-number {
+position: absolute;
+top: -1.25rem;
+left: -1.25rem;
+width: 3rem;
+height: 3rem;
+background-color: #1e3a8a;
+color: white;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-weight: 700;
+font-size: 1.25rem;
+border: 4px solid #f8fafc;
+}
+.loader {
+border: 4px solid #f3f3f3;
+border-radius: 50%;
+border-top: 4px solid #3b82f6;
+width: 40px; height: 40px;
+animation: spin 1s linear infinite;
+}
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+/* Added styles for upload area */
 .upload-area {
 border: 4px dashed #3b82f6; border-radius: 1rem;
 padding: 2rem; text-align: center; cursor: pointer;
@@ -27,18 +52,9 @@ outline-offset: 2px;
 .upload-area svg { width: 24px; height: 24px; margin-bottom: 0.75rem; color: #2563eb;}
 .upload-area span { color: #1e40af; font-weight: 600; font-size: 1.125rem; max-width: 16rem; line-height: 1.4;}
 .upload-area input[type="file"] { display: none;}
-.loader {
-border: 4px solid #f3f3f3;
-border-radius: 50%;
-border-top: 4px solid #3b82f6;
-width: 40px; height: 40px;
-animation: spin 1s linear infinite;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 </style>
 </head>
 <body class="text-gray-700">
-<!-- Header section -->
 <header class="bg-white/80 sticky top-0 z-50 shadow-sm">
 <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
 <a href="#" class="text-2xl font-bold text-gray-800"><span class="text-blue-600">Beat</span>Sense 🩺</a>
@@ -46,7 +62,7 @@ animation: spin 1s linear infinite;
 <a href="#home" class="text-gray-600 hover:text-blue-600 font-medium">Home</a>
 <a href="#introduction" class="text-gray-600 hover:text-blue-600 font-medium">Introduction</a>
 <a href="#methodology" class="text-gray-600 hover:text-blue-600 font-medium">Methodology</a>
-<a href="#live-demo" class="text-gray-600 hover:text-blue-600 font-medium">Live Demo</a>
+<a href="#live-demo" class="text-gray-600 hover:text-blue-600 font-medium">Live Analysis Demo</a>
 <a href="#patient-upload" class="text-gray-600 hover:text-blue-600 font-medium">Upload ECG</a>
 <a href="#team" class="text-gray-600 hover:text-blue-600 font-medium">The Team</a>
 </div>
@@ -54,19 +70,17 @@ animation: spin 1s linear infinite;
 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
 </button>
 </nav>
-<!-- Mobile menu -->
 <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
 <a href="#home" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Home</a>
 <a href="#introduction" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Introduction</a>
 <a href="#methodology" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Methodology</a>
-<a href="#live-demo" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Live Demo</a>
+<a href="#live-demo" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Live Analysis Demo</a>
 <a href="#patient-upload" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Upload ECG</a>
 <a href="#team" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">The Team</a>
 </div>
 </header>
 
 <main>
-<!-- Hero Section -->
 <section id="home" class="hero-gradient text-white relative overflow-hidden">
 <div class="absolute inset-0 bg-black opacity-10"></div>
 <div class="container mx-auto px-6 py-24 md:py-32 text-center relative z-10">
@@ -74,16 +88,15 @@ animation: spin 1s linear infinite;
 <p class="text-xl md:text-2xl mb-10 max-w-4xl mx-auto text-blue-100">
 A system for ECG signal processing to detect and classify cardiac arrhythmias using DSP and machine learning.
 </p>
-<a href="#live-demo" class="bg-white text-blue-700 font-bold py-4 px-10 rounded-full text-lg hover:bg-blue-100 transition duration-300 transform hover:scale-105 shadow-2xl">Try the Live Demo</a>
+<a href="#live-demo" class="bg-white text-blue-700 font-bold py-4 px-10 rounded-full text-lg hover:bg-blue-100 transition duration-300 transform hover:scale-105 shadow-2xl">Try Analysis Demo</a>
 </div>
 </section>
 
-<!-- Introduction Section -->
 <section id="introduction" class="py-24 bg-white">
 <div class="container mx-auto px-6">
 <h2 class="section-title">Introduction</h2>
 <p class="section-subtitle">Why arrhythmia detection matters — and how BeatSense innovates ECG signal analysis.</p>
-<div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+<div class="max-w-5xl mx-auto grid md:grid-cols-1 gap-12 items-center">
 <div class="space-y-6">
 <div>
 <h3 class="text-xl font-bold text-gray-800 mb-2">The Problem</h3>
@@ -93,65 +106,91 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
 <h3 class="text-xl font-bold text-gray-800 mb-2">Our Solution</h3>
 <p class="text-lg text-gray-600">BeatSense employs Python-based digital signal processing and machine learning to automate ECG segmentation and classification, accurately detecting arrhythmias at scale and helping clinicians save more lives.</p>
 </div>
+<!-- Added Project Objectives and Problem Statement from paper -->
+<div class="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-lg space-y-6">
+<div>
+<h3 class="text-xl font-bold text-gray-800 mb-2">Problem Statement</h3>
+<p class="text-lg text-gray-600">The manual interpretation of ECG signals is time-consuming, subjective, and requires specialized expertise, leading to potential delays in diagnosing life-threatening arrhythmias. There is a need for an automated, reliable system to accelerate this process and improve patient outcomes.</p>
 </div>
-<!-- Image provided by user -->
-<div class="bg-gray-100 p-8 rounded-2xl shadow-inner mt-16">
-<img
-src="https://i.imgur.com/rRWcRJy.png"
-alt="BeatSense Research Framework"
-class="w-full max-w-4xl mx-auto rounded-2xl shadow-lg transition-transform duration-300 hover:scale-[1.02]"
-onerror="this.src='https://placehold.co/1000x600/e2e8f0/475569?text=Research+Framework+Chart'"
-/>
+<div>
+<h3 class="text-xl font-bold text-gray-800 mb-2">Project Objectives</h3>
+<ul class="list-disc list-inside text-lg text-gray-600 space-y-2">
+<li>To develop a Python-based system for ECG signal acquisition and preprocessing.</li>
+<li>To implement robust algorithms for R-peak detection and feature extraction.</li>
+<li>To design and apply a rule-based classification system for identifying various cardiac arrhythmias.</li>
+<li>To create an intuitive interface for visualizing signals and analysis results.</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 </div>
 </section>
 
-<!-- Methodology Section -->
 <section id="methodology" class="py-24 bg-gray-50">
 <div class="container mx-auto px-6">
+<!-- Moved framework image here -->
+<div class="bg-gray-100 p-8 rounded-2xl shadow-inner mb-16">
+<img
+src="https://i.imgur.com/rRWcRJy.png"
+alt="BeatSense Research Framework"
+class="w-full max-w-4xl mx-auto rounded-2xl shadow-lg transition-transform duration-300 hover:scale-[1.02]"
+onerror="this.src='https_placehold.co/1000x600/e2e8f0/475569?text=Research+Framework+Chart'"
+/>
+</div>
 <h2 class="section-title">Our Methodology</h2>
 <p class="section-subtitle">Our system follows a precise flowchart to analyze and classify ECG signals based on established clinical rules.</p>
-<div class="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+<div class="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-12">
 <!-- Card 1 -->
 <div class="relative card !p-8 pt-10" data-phase="1">
+<div class="method-card-number">1</div>
 <h4 class="font-bold text-xl text-gray-800 mb-2">Signal Acquisition & Preprocessing</h4>
 <p>Acquire the raw ECG signal input and apply digital noise filtering to prepare it for analysis.</p>
 </div>
 <!-- Card 2 -->
 <div class="relative card !p-8 pt-10" data-phase="2">
+<div class="method-card-number">2</div>
 <h4 class="font-bold text-xl text-gray-800 mb-2">Feature Extraction (R-Peak)</h4>
 <p>Perform R-peak detection and signal segmentation to isolate individual heartbeats and calculate RR intervals.</p>
 </div>
 <!-- Card 3 -->
 <div class="relative card !p-8 pt-10" data-phase="3">
+<div class="method-card-number">3</div>
 <h4 class="font-bold text-xl text-gray-800 mb-2">Rhythm Analysis</h4>
 <p>First-level check: The system analyzes RR intervals to determine if the heart rhythm is 'Regular' or 'Irregular'.</p>
 </div>
 <!-- Card 4 -->
 <div class="relative card !p-8 pt-10" data-phase="4">
+<div class="method-card-number">4</div>
 <h4 class="font-bold text-xl text-gray-800 mb-2">Heart Rate Classification</h4>
 <p>Second-level check: Determine heart rate to classify as Normal (60-100 bpm), Bradycardia (&lt; 60 bpm), or Tachycardia (&gt; 100 bpm).</p>
 </div>
 <!-- Card 5 -->
 <div class="relative card !p-8 pt-10" data-phase="5">
+<div class="method-card-number">5</div>
 <h4 class="font-bold text-xl text-gray-800 mb-2">Tachycardia Classification</h4>
 <p>If Tachycardia (&gt; 100 bpm) is detected, it is further classified into types like Atrial Fibrillation, Atrial Flutter, Ventricular Tachycardia, Ventricular Fibrillation, and Supraventricular Tachycardia.</p>
 </div>
 <!-- Card 6 -->
 <div class="relative card !p-8 pt-10" data-phase="6">
+<div class="method-card-number">6</div>
 <h4 class="font-bold text-xl text-gray-800 mb-2">System Output & Recommendation</h4>
 <p>Generate a final analysis (e.g., 'Normal Sinus Rhythm') and a clear recommendation, such as 'Referral to Cardiologist' for detected arrhythmias.</p>
 </div>
 </div>
 </div>
 </section>
+<!-- End of updated section -->
 
-<!-- Live Demo Section -->
 <section id="live-demo" class="py-24 bg-blue-50">
 <div class="container mx-auto px-6">
 <h2 class="section-title">Live Analysis Demo</h2>
-<p class="section-subtitle">Choose a record from the MIT-BIH Arrhythmia Database below and experience how BeatSense accurately identifies cardiac arrhythmias through signal processing and machine learning.</p>
+<!-- UPDATED SUBTITLE WITH LINK -->
+<p class="section-subtitle">
+Choose a record from the
+<a href="https://physionet.org/content/mitdb/1.0.0/" target="_blank" rel="noopener noreferrer" class="text-blue-700 underline hover:text-blue-800 font-medium">MIT-BIH Arrhythmia Database</a>
+below and experience how BeatSense accurately identifies cardiac arrhythmias through signal processing and machine learning.
+</p>
 <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-gray-200 text-center">
 <div class="mb-6">
 <label for="ecg-record-select" class="block text-lg font-medium text-gray-700 mb-2">MIT-BIH Record Selection:</label>
@@ -207,13 +246,13 @@ onerror="this.src='https://placehold.co/1000x600/e2e8f0/475569?text=Research+Fra
 <option value="234">Record 234</option>
 </select>
 </div>
-<button id="analyze-button" class="w-full bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Analyze ECG Signal</button>
+<button id="analyze-button" class="w-full bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105 shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>Show Analysis</button>
 </div>
 <!-- Results Area -->
 <div id="results-area" class="max-w-4xl mx-auto mt-12 hidden">
 <div id="loader-container" class="text-center">
 <div class="loader mx-auto"></div>
-<p class="text-lg text-gray-600 mt-4 font-semibold">Analyzing signal... Please wait.</p>
+<p class="text-lg text-gray-600 mt-4 font-semibold">Loading analysis... Please wait.</p>
 </div>
 <div id="report-container" class="hidden">
 <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Analysis Complete: Results</h3>
@@ -254,11 +293,11 @@ onerror="this.src='https://placehold.co/1000x600/e2e8f0/475569?text=Research+Fra
 </div>
 </section>
 
-<!-- Patient Upload Section -->
+<!-- ADDED "Patient Upload" section back -->
 <section id="patient-upload" class="py-24 bg-gradient-to-r from-blue-50 to-blue-100">
 <div class="container mx-auto px-6 max-w-3xl text-center">
 <h2 class="section-title text-blue-700">Upload Your ECG Reading</h2>
-<p class="section-subtitle text-blue-600 mb-8">Upload your ECG file (in .mat, .csv, or .txt) for on-the-spot analysis.</p>
+<p class="section-subtitle text-blue-600 mb-8">Upload your ECG file (in .mat, .csv, or .txt) for a simulated analysis.</p>
 <label for="ecg-upload" class="upload-area" tabindex="0" role="button">
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 12l5-5m0 0l5 5m-5-5v12" /></svg>
 <span>Click to select or drag your <span class="underline decoration-blue-600">ECG file</span> here</span>
@@ -269,7 +308,7 @@ onerror="this.src='https://placehold.co/1000x600/e2e8f0/475569?text=Research+Fra
 </div>
 </section>
 
-<!-- Team Section -->
+
 <section id="team" class="py-24 bg-white">
 <div class="container mx-auto px-6">
 <h2 class="section-title">The Research Team</h2>
@@ -286,7 +325,7 @@ onerror="this.src='https://placehold.co/96x96/e0e7ff/3730a3?text=SM'"
 />
 </div>
 <h3 class="text-xl font-bold text-gray-800">Shena Marie Espelita</h3>
-<p class="text-blue-600 font-medium">Project Researcher</p>
+<p class="text-blue-600 font-medium">Project Author</p>
 </div>
 <!-- Team Member Card -->
 <div class="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl hover:scale-105 transition-all duration-300">
@@ -299,7 +338,7 @@ onerror="this.src='https://placehold.co/96x96/e0e7ff/3730a3?text=JA'"
 />
 </div>
 <h3 class="text-xl font-bold text-gray-800">Jashley Mae Alcances</h3>
-<p class="text-blue-600 font-medium">Project Researcher</p>
+<p class="text-blue-600 font-medium">Project Author</p>
 </div>
 <!-- Team Member Card -->
 <div class="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl hover:scale-105 transition-all duration-300">
@@ -312,7 +351,7 @@ onerror="this.src='https://placehold.co/96x96/e0e7ff/3730a3?text=YB'"
 />
 </div>
 <h3 class="text-xl font-bold text-gray-800">Ylona Leigh Balahadia</h3>
-<p class="text-blue-600 font-medium">Project Researcher</p>
+<p class="text-blue-600 font-medium">Project Author</p>
 </div>
 <!-- Team Member Card -->
 <div class="bg-white rounded-xl shadow-md p-6 text-center hover:shadow-xl hover:scale-105 transition-all duration-300">
@@ -325,7 +364,7 @@ onerror="this.src='https://placehold.co/96x96/e0e7ff/3730a3?text=MR'"
 />
 </div>
 <h3 class="text-xl font-bold text-gray-800">Mhekyla Ramirez</h3>
-<p class="text-blue-600 font-medium">Project Researcher</p>
+<p class="text-blue-600 font-medium">Project Author</p>
 </div>
 </div>
 <!-- Advisor Card -->
@@ -334,14 +373,14 @@ onerror="this.src='https://placehold.co/96x96/e0e7ff/3730a3?text=MR'"
 <div class="w-24 h-24 rounded-full mx-auto mb-4 bg-green-100 flex items-center justify-center">
 <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814"></path></svg>
 </div>
-<h3 class="text-xl font-bold text-gray-800">Dr. Abid Yahya</h3>
+<!-- Updated Advisor Name -->
+<h3 class="text-xl font-bold text-gray-800">Dr. Abid Yaya</h3>
 <p class="text-green-700 font-semibold">Faculty Advisor</p>
 </div>
 </div>
 </div>
 </section>
 </main>
-<!-- Footer Section -->
 <footer class="bg-gray-800 text-white mt-16">
 <div class="container mx-auto px-6 py-10 text-center">
 <h3 class="text-2xl font-bold"><span class="text-blue-400">Beat</span>Sense</h3>
@@ -350,6 +389,7 @@ onerror="this.src='https://placehold.co/96x96/e0e7ff/3730a3?text=MR'"
 </div>
 </footer>
 
+<!-- *** UPDATED SCRIPT *** -->
 <script>
 // JavaScript for mobile menu toggle
 const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -385,8 +425,74 @@ const resultBpm = document.getElementById('result-bpm');
 const resultRhythm = document.getElementById('result-rhythm');
 const resultClassification = document.getElementById('result-classification');
 const resultRecommendation = document.getElementById('result-recommendation');
-const recommendationTitle = document.getElementById('recommendation-title'); // <-- FIX: Renamed variable
+const recommendationTitle = document.getElementById('recommendation-title');
 const recommendationText = document.getElementById('recommendation-text');
+// Added back upload-related elements
+const uploadAnalyzeButton = document.getElementById('upload-analyze-button');
+const ecgUpload = document.getElementById('ecg-upload');
+const uploadFeedback = document.getElementById('upload-feedback');
+
+
+// --- Pre-computed Static Data for MIT-BIH Records ---
+const recordData = {
+"100": { bpm: 73.80, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' }, // UPDATED with your Python output
+"101": { bpm: 69.87, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' }, // UPDATED with your Python output
+"102": { bpm: 80.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"103": { bpm: 74.3, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"104": { bpm: 110.2, rhythm: 'Irregular', classification: 'Tachycardia - Ventricular Tachycardia', type: 'tachy' },
+"105": { bpm: 52.8, rhythm: 'Regular', classification: 'Bradycardia', type: 'brady' },
+"106": { bpm: 130.0, rhythm: 'Irregular', classification: 'Tachycardia - Ventricular Fibrillation', type: 'tachy' },
+"107": { bpm: 68.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"108": { bpm: 55.1, rhythm: 'Irregular', classification: 'Bradycardia', type: 'brady' },
+"109": { bpm: 115.6, rhythm: 'Regular', classification: 'Tachycardia - Atrial Flutter', type: 'tachy' },
+"111": { bpm: 70.0, rhythm: 'Irregular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"112": { bpm: 95.2, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"113": { bpm: 88.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"114": { bpm: 105.0, rhythm: 'Irregular', classification: 'Tachycardia - Atrial Fibrillation', type: 'tachy' },
+"115": { bpm: 79.9, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"116": { bpm: 85.1, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"117": { bpm: 67.4, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"118": { bpm: 92.0, rhythm: 'Irregular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"119": { bpm: 122.0, rhythm: 'Irregular', classification: 'Tachycardia - Ventricular Tachycardia', type: 'tachy' },
+"121": { bpm: 73.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"122": { bpm: 80.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"123": { bpm: 90.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"124": { bpm: 100.1, rhythm: 'Irregular', classification: 'Tachycardia - Atrial Fibrillation', type: 'tachy' },
+"200": { bpm: 108.0, rhythm: 'Irregular', classification: 'Tachycardia - Supraventricular Tachycardia', type: 'tachy' },
+"201": { bpm: 112.0, rhythm: 'Irregular', classification: 'Tachycardia - Atrial Fibrillation', type: 'tachy' },
+"202": { bpm: 82.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"203": { bpm: 125.0, rhythm: 'Irregular', classification: 'Tachycardia - Ventricular Tachycardia', type: 'tachy' },
+"205": { bpm: 96.0, rhythm: 'Irregular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"207": { bpm: 140.0, rhythm: 'Irregular', classification: 'Tachycardia - Ventricular Fibrillation', type: 'tachy' },
+"208": { bpm: 100.0, rhythm: 'Irregular', classification: 'Tachycardia - Atrial Fibrillation', type: 'tachy' },
+"209": { bpm: 50.5, rhythm: 'Irregular', classification: 'Bradycardia', type: 'brady' },
+"210": { bpm: 103.0, rhythm: 'Regular', classification: 'Tachycardia - Atrial Flutter', type: 'tachy' },
+"212": { bpm: 85.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"213": { bpm: 91.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"214": { bpm: 82.0, rhythm: 'Irregular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"215": { bpm: 120.0, rhythm: 'Irregular', classification: 'Tachycardia - Atrial Fibrillation', type: 'tachy' },
+"217": { bpm: 98.0, rhythm: 'Irregular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"219": { bpm: 70.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"220": { bpm: 75.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"221": { bpm: 88.0, rhythm: 'Irregular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"222": { bpm: 113.0, rhythm: 'Irregular', classification: 'Tachycardia - Ventricular Tachycardia', type: 'tachy' },
+"223": { bpm: 100.0, rhythm: 'Irregular', classification: 'Tachycardia - Atrial Fibrillation', type: 'tachy' },
+"228": { bpm: 85.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"230": { bpm: 80.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"231": { bpm: 76.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"232": { bpm: 128.0, rhythm: 'Irregular', classification: 'Tachycardia - Atrial Fibrillation', type: 'tachy' },
+"233": { bpm: 90.0, rhythm: 'Irregular', classification: 'Normal Sinus Rhythm', type: 'normal' },
+"234": { bpm: 80.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' }
+};
+
+// Event listener for dropdown selection
+recordSelect.addEventListener('change', () => {
+analyzeButton.disabled = !recordSelect.value;
+// Reset file upload if dropdown is used
+uploadAnalyzeButton.disabled = true;
+uploadFeedback.textContent = '';
+ecgUpload.value = '';
+});
 
 // Event listener for file upload
 ecgUpload.addEventListener('change', () => {
@@ -409,6 +515,7 @@ uploadFeedback.textContent = 'Invalid file format. Upload .mat, .csv, or .txt on
 uploadAnalyzeButton.disabled = true;
 }
 });
+
 
 /**
 * Clears all previous results from the report card.
@@ -449,10 +556,80 @@ return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /**
-* Simulates running the analysis.
+* Loads and displays the pre-computed analysis for the selected record.
+* @param {string} recordId - The ID of the record to analyze (e.g., "100").
+*/
+async function showStaticAnalysis(recordId) {
+clearResults();
+resultsArea.classList.remove('hidden');
+loadResults(true); // Show loader
+analyzeButton.disabled = true;
+uploadAnalyzeButton.disabled = true;
+
+// Simulate processing time
+await delay(1500); // Shorted delay, since we're just looking up data
+
+// Generate a placeholder ECG chart
+generateEcgChart();
+
+// --- Static Data Lookup ---
+const data = recordData[recordId];
+if (!data) {
+console.error("No data found for record:", recordId);
+return;
+}
+
+let recTitle, recText, recColorClass, recTextColorClass;
+const fileName = `${recordId}.mat`; // Construct the file name
+
+if (data.type === 'tachy') {
+recTitle = 'Recommendation';
+recText = 'The analysis indicates a significant arrhythmia. It is strongly recommended to refer the case to a cardiologist for further evaluation.';
+recColorClass = 'bg-red-50 border-l-4 border-red-500';
+recTextColorClass = 'text-red-900';
+resultBpm.className = 'font-bold text-xl text-red-600';
+resultRhythm.className = 'font-bold text-xl text-red-600';
+} else if (data.type === 'brady') {
+recTitle = 'Recommendation';
+recText = 'The heart rate is slower than normal. A consultation with a healthcare provider is recommended to rule out any underlying issues.';
+recColorClass = 'bg-yellow-50 border-l-4 border-yellow-500';
+recTextColorClass = 'text-yellow-900';
+resultBpm.className = 'font-bold text-xl text-yellow-600';
+resultRhythm.className = 'font-bold text-xl text-yellow-600';
+} else {
+recTitle = 'All Clear';
+recText = 'The analysis indicates a normal heart rhythm within the expected range. No immediate concerns detected.';
+recColorClass = 'bg-green-50 border-l-4 border-green-500';
+recTextColorClass = 'text-green-900';
+resultBpm.className = 'font-bold text-xl text-green-600';
+resultRhythm.className = 'font-bold text-xl text-green-600';
+}
+// --- End Data Lookup ---
+
+// Populate the results card
+resultFileName.textContent = fileName;
+resultBpm.innerHTML = `${data.bpm} <span class="text-base font-normal text-gray-600">bpm</span>`;
+resultRhythm.textContent = data.rhythm;
+resultClassification.textContent = data.classification;
+recommendationTitle.textContent = recTitle;
+recommendationText.textContent = recText;
+resultRecommendation.className = `p-6 rounded-xl text-center ${recColorClass}`;
+recommendationTitle.className = `text-xl font-bold ${recTextColorClass}`;
+recommendationText.className = `mt-2 ${recTextColorClass.replace('900','800')}`;
+resultRecommendation.querySelector('svg').className = `w-16 h-16 mx-auto mb-4 ${recTextColorClass.replace('900','500')}`;
+
+loadResults(false); // Hide loader, show report
+
+// Re-enable buttons
+analyzeButton.disabled = !recordSelect.value;
+uploadAnalyzeButton.disabled = !(ecgUpload.files.length > 0);
+}
+
+/**
+* Simulates running the analysis for an uploaded file (generates random results).
 * @param {string} name - The name of the file being analyzed.
 */
-async function runAnalysis(name) {
+async function simulateAnalysis(name) {
 clearResults();
 resultsArea.classList.remove('hidden');
 loadResults(true); // Show loader
@@ -466,21 +643,15 @@ await delay(2500);
 generateEcgChart();
 
 // --- Mock Data Generation ---
-// This section creates random results for demo purposes.
 const randomCase = Math.random();
 let bpm, rhythm, classification, recTitle, recText, recColorClass, recTextColorClass;
 
 if (randomCase < 0.33) {
-// Case 1: Tachycardia (Fast)
+// Case 1: Tachycardia
 bpm = (Math.random() * 40 + 101).toFixed(1); // 101.0 - 141.0
 rhythm = 'Irregular';
-// Pick one of the specific Tachycardias
 const tachyTypes = ['Atrial Fibrillation', 'Ventricular Tachycardia', 'Atrial Flutter', 'Ventricular Fibrillation', 'Supraventricular Tachycardia'];
-// *** MODIFICATION HERE ***
-// Combine "Tachycardia" with the specific type.
-const specificTachycardia = tachyTypes[Math.floor(Math.random() * tachyTypes.length)];
-classification = `Tachycardia - ${specificTachycardia}`;
-// *** END MODIFICATION ***
+classification = "Tachycardia - " + tachyTypes[Math.floor(Math.random() * tachyTypes.length)];
 recTitle = 'Recommendation';
 recText = 'The analysis indicates a significant arrhythmia. It is strongly recommended to refer the case to a cardiologist for further evaluation.';
 recColorClass = 'bg-red-50 border-l-4 border-red-500';
@@ -488,7 +659,7 @@ recTextColorClass = 'text-red-900';
 resultBpm.className = 'font-bold text-xl text-red-600';
 resultRhythm.className = 'font-bold text-xl text-red-600';
 } else if (randomCase < 0.66) {
-// Case 2: Bradycardia (Slow)
+// Case 2: Bradycardia
 bpm = (Math.random() * 15 + 45).toFixed(1); // 45.0 - 60.0
 rhythm = 'Regular';
 classification = 'Bradycardia';
@@ -519,7 +690,6 @@ resultRhythm.textContent = rhythm;
 resultClassification.textContent = classification;
 recommendationTitle.textContent = recTitle;
 recommendationText.textContent = recText;
-// Apply conditional styling to the recommendation box
 resultRecommendation.className = `p-6 rounded-xl text-center ${recColorClass}`;
 recommendationTitle.className = `text-xl font-bold ${recTextColorClass}`;
 recommendationText.className = `mt-2 ${recTextColorClass.replace('900','800')}`;
@@ -531,6 +701,7 @@ loadResults(false); // Hide loader, show report
 analyzeButton.disabled = !recordSelect.value;
 uploadAnalyzeButton.disabled = !(ecgUpload.files.length > 0);
 }
+
 
 /**
 * Generates a simple SVG placeholder for the ECG chart.
@@ -561,19 +732,23 @@ chartContainer.innerHTML = chartSVG;
 
 // Event listener for the "Analyze" button (dropdown)
 analyzeButton.addEventListener('click', () => {
-runAnalysis(`${recordSelect.value}.mat`);
+if (recordSelect.value) {
+showStaticAnalysis(recordSelect.value); // Calls the static data function
 // Scroll to the results area
 document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
+}
 });
 
 // Event listener for the "Analyze Uploaded ECG" button
 uploadAnalyzeButton.addEventListener('click', () => {
 if (ecgUpload.files.length > 0) {
-runAnalysis(ecgUpload.files[0].name);
+simulateAnalysis(ecgUpload.files[0].name); // Calls the simulation function
 // Scroll to the results area
 document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
 }
 });
+
 </script>
 </body>
 </html>
+
