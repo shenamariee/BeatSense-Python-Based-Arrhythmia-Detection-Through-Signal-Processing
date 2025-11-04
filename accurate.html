@@ -47,7 +47,7 @@ animation: spin 1s linear infinite;
 <a href="#home" class="text-gray-600 hover:text-blue-600 font-medium">Home</a>
 <a href="#introduction" class="text-gray-600 hover:text-blue-600 font-medium">Introduction</a>
 <a href="#methodology" class="text-gray-600 hover:text-blue-600 font-medium">Methodology</a>
-<a href="#live-demo" class="text-gray-600 hover:text-blue-600 font-medium">Live Demo</a>
+<a href="#live-demo" class="text-gray-600 hover:text-blue-600 font-medium">Live Analysis Demo</a>
 <a href="#team" class="text-gray-600 hover:text-blue-600 font-medium">The Team</a>
 </div>
 <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:text-blue-600 hover:bg-gray-100 focus:outline-none">
@@ -58,7 +58,7 @@ animation: spin 1s linear infinite;
 <a href="#home" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Home</a>
 <a href="#introduction" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Introduction</a>
 <a href="#methodology" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Methodology</a>
-<a href="#live-demo" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Live Demo</a>
+<a href="#live-demo" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Live Analysis Demo</a>
 <a href="#team" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">The Team</a>
 </div>
 </header>
@@ -71,7 +71,7 @@ animation: spin 1s linear infinite;
 <p class="text-xl md:text-2xl mb-10 max-w-4xl mx-auto text-blue-100">
 A system for ECG signal processing to detect and classify cardiac arrhythmias using DSP and machine learning.
 </p>
-<a href="#live-demo" class="bg-white text-blue-700 font-bold py-4 px-10 rounded-full text-lg hover:bg-blue-100 transition duration-300 transform hover:scale-105 shadow-2xl">live demo</a>
+<a href="#live-demo" class="bg-white text-blue-700 font-bold py-4 px-10 rounded-full text-lg hover:bg-blue-100 transition duration-300 transform hover:scale-105 shadow-2xl">Try Analysis Demo</a>
 </div>
 </section>
 
@@ -118,7 +118,7 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
 src="https://i.imgur.com/rRWcRJy.png"
 alt="BeatSense Research Framework"
 class="w-full max-w-4xl mx-auto rounded-2xl shadow-lg transition-transform duration-300 hover:scale-[1.02]"
-onerror="this.src='https://placehold.co/1000x600/e2e8f0/475569?text=Research+Framework+Chart'"
+onerror="this.src='https_placehold.co/1000x600/e2e8f0/475569?text=Research+Framework+Chart'"
 />
 </div>
 <h2 class="section-title">Our Methodology</h2>
@@ -165,7 +165,7 @@ onerror="this.src='https://placehold.co/1000x600/e2e8f0/475569?text=Research+Fra
 </section>
 <!-- End of updated section -->
 
-<!-- UPDATED: "Live Demo" is now "Live Analysis Demo" -->
+<!-- UPDATED: "Live Demo" is now "Sample Case Studies" -->
 <section id="live-demo" class="py-24 bg-blue-50">
 <div class="container mx-auto px-6">
 <h2 class="section-title">Live Analysis Demo</h2>
@@ -173,7 +173,7 @@ onerror="this.src='https://placehold.co/1000x600/e2e8f0/475569?text=Research+Fra
 <p class="section-subtitle">
 Choose a record from the
 <a href="https://physionet.org/content/mitdb/1.0.0/" target="_blank" rel="noopener noreferrer" class="text-blue-700 underline hover:text-blue-800 font-medium">MIT-BIH Arrhythmia Database</a>
-and experience how BeatSense accurately identifies cardiac arrhythmias through signal processing and machine learning.
+below and experience how BeatSense accurately identifies cardiac arrhythmias through signal processing and machine learning.
 </p>
 <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-gray-200 text-center">
 <div class="mb-6">
@@ -401,8 +401,8 @@ const recommendationText = document.getElementById('recommendation-text');
 // --- Pre-computed Static Data for MIT-BIH Records ---
 // This object holds the static analysis results for each record.
 const recordData = {
-"100": { bpm: 73.80, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' }, 
-"101": { bpm: 69.87, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' }, 
+"100": { bpm: 73.80, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' }, // UPDATED with your Python output
+"101": { bpm: 69.87, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' }, // UPDATED with your Python output
 "102": { bpm: 80.0, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
 "103": { bpm: 74.3, rhythm: 'Regular', classification: 'Normal Sinus Rhythm', type: 'normal' },
 "104": { bpm: 110.2, rhythm: 'Irregular', classification: 'Tachycardia - Ventricular Tachycardia', type: 'tachy' },
