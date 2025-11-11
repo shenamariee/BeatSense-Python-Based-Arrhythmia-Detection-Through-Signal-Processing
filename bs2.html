@@ -152,7 +152,7 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
 <section id="user-info" class="py-14 bg-white border-t border-b">
   <div class="container mx-auto px-6 max-w-4xl">
     <h2 class="section-title">Patient / User Info</h2>
-    <p class="section-subtitle">Enter simple details to personalize the demo results (optional).</p>
+    <p class="section-subtitle">Enter simple details to personalize the demo results.</p>
 
     <form id="user-info-form" class="info-form grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
       <div class="col-span-1 md:col-span-1">
@@ -171,6 +171,13 @@ A system for ECG signal processing to detect and classify cardiac arrhythmias us
           <option value="Male">Male</option>
           <option value="Other">Other</option>
         </select>
+         <!-- Submit Button ("Enter") -->
+                    <div class="text-right pt-4">
+                        <button type="submit" class="btn-primary">
+                            Submit Info
+                        </button>
+                    </div>
+                </form>
       </div>
       <div class="md:col-span-3 text-sm text-gray-500 mt-2">
         <p class="info-note">This information is used only to label the demo output for educational purposes and is not stored or sent anywhere.</p>
