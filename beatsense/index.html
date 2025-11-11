@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BeatSense: Python-Based Arrhythmia Detection — Home</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+.hero-gradient { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+</style>
+</head>
+<body class="text-gray-700">
+<header class="bg-white/80 sticky top-0 z-50 shadow-sm">
+<nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+<a href="index.html" class="text-2xl font-bold text-gray-800"><span class="text-blue-600">Beat</span>Sense 🩺</a>
+<div class="hidden md:flex space-x-8">
+<a href="index.html" class="text-blue-600 font-semibold">Home</a>
+<a href="introduction.html" class="text-gray-600 hover:text-blue-600 font-medium">Introduction</a>
+<a href="working-principle.html" class="text-gray-600 hover:text-blue-600 font-medium">Working Principle</a>
+<a href="demo.html" class="text-gray-600 hover:text-blue-600 font-medium">ECG Demo</a>
+<a href="upload.html" class="text-gray-600 hover:text-blue-600 font-medium">Upload ECG</a>
+<a href="team.html" class="text-gray-600 hover:text-blue-600 font-medium">The Team</a>
+</div>
+<button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:text-blue-600 hover:bg-gray-100 focus:outline-none">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/></svg>
+</button>
+</nav>
+<div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+<a href="index.html" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Home</a>
+<a href="introduction.html" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Introduction</a>
+<a href="working-principle.html" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Working Principle</a>
+<a href="demo.html" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">ECG Demo</a>
+<a href="upload.html" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">Upload ECG</a>
+<a href="team.html" class="block py-2 text-gray-600 hover:text-blue-600 font-medium">The Team</a>
+</div>
+</header>
+
+<main>
+<section id="home" class="hero-gradient text-white relative overflow-hidden">
+<div class="absolute inset-0 bg-black opacity-10"></div>
+<div class="container mx-auto px-6 py-24 md:py-32 text-center relative z-10">
+<h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">BeatSense: Python-Based Arrhythmia Detection</h1>
+<p class="text-xl md:text-2xl mb-10 max-w-4xl mx-auto text-blue-100">
+A system for ECG signal processing to detect and classify cardiac arrhythmias using DSP and machine learning.
+</p>
+<a href="demo.html" class="bg-white text-blue-700 font-bold py-4 px-10 rounded-full text-lg hover:bg-blue-100 transition duration-300 transform hover:scale-105 shadow-2xl">Try Analysis Demo</a>
+</div>
+</section>
+
+<section class="py-20 bg-white">
+<div class="container mx-auto px-6 max-w-4xl text-center">
+<h2 class="text-3xl font-bold text-gray-800 mb-4">What is BeatSense?</h2>
+<p class="text-lg text-gray-600">BeatSense is a Python-based educational system that demonstrates ECG signal preprocessing, feature extraction and rule-based arrhythmia classification. Use the demo to explore pre-computed MIT-BIH records or upload your own ECG (.mat/.csv/.txt) for a simulated analysis.</p>
+</div>
+</section>
+
+<footer class="bg-gray-800 text-white mt-16">
+<div class="container mx-auto px-6 py-10 text-center">
+<h3 class="text-2xl font-bold"><span class="text-blue-400">Beat</span>Sense</h3>
+<p class="mt-2 text-gray-400">Advancing cardiac health through signal processing.</p>
+<div class="mt-6"><p class="text-gray-500 text-sm">&copy; 2025 - The BeatSense Project Team</p></div>
+</div>
+</footer>
+
+<script>
+// mobile menu toggle
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+</script>
+</body>
+</html>
