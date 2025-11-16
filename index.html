@@ -13,7 +13,9 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Light gray background */
+            /* Subtle gradient background */
+            background-color: #f8fafc;
+            background: linear-gradient(135deg, #f8fafc 0%, #f0f5ff 100%);
         }
         
         /* Hide all sections by default */
@@ -34,51 +36,102 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Custom styles for buttons */
+        /* Custom styles for buttons (New: blue) */
         .btn-primary {
-            @apply inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+            @apply inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed;
         }
         
         .btn-secondary {
-            @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all;
+            @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all;
         }
         
-        /* Custom styles for file input */
+        /* Custom styles for file input (New: blue) */
         input[type="file"]::file-selector-button {
-            @apply px-4 py-2 mr-4 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 cursor-pointer transition-all;
+            @apply px-4 py-2 mr-4 border border-gray-300 text-sm font-medium rounded-lg shadow-sm text-gray-700 bg-white hover:bg-gray-50 cursor-pointer transition-all;
         }
         
-        /* Styles for the "Choose Feature" cards */
+        /* Styles for the "Choose Feature" cards (New: blue hover) */
         .feature-card {
-            @apply flex flex-col items-center p-8 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-lg hover:border-blue-300 transition-all cursor-pointer;
+            @apply flex flex-col items-center p-8 bg-white rounded-lg border border-gray-200 hover:shadow-xl hover:border-blue-300 transition-all cursor-pointer;
+        }
+        
+        /* NEW: Hero gradient from design guide */
+        .hero-gradient { 
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); 
+        }
+
+        /* NEW: ECG line animation from design guide */
+        .ecg-line-animated {
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+            animation: draw-line 4s ease-out forwards;
+        }
+        @keyframes draw-line {
+            to { stroke-dashoffset: 0; }
+        }
+        
+        /* NEW: Hero button style from user image */
+        .btn-hero {
+            @apply inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg shadow-sm text-blue-700 bg-white hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition-all;
         }
     </style>
 </head>
 <body class="flex flex-col items-center justify-center min-h-screen p-4">
 
     <!-- Main Wizard Container -->
-    <div class="w-full max-w-5xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col">
+    <div class="w-full max-w-5xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col border border-gray-100">
 
-        <!-- Header / Progress Bar -->
+        <!-- Header / Progress Bar (New: blue) -->
         <div class="p-4 bg-gray-50 border-b border-gray-200">
-            <h1 class="text-2xl font-bold text-blue-800 text-center">BeatSense</h1>
-            <div id="progress-indicator" class="text-center text-sm text-gray-500 mt-2"></div>
+            <div class="flex items-center justify-center gap-3">
+                <img src="https://i.imgur.com/HQWhsJ1.png" alt="BeatSense Logo" class="w-8 h-8 object-contain">
+                <h1 class="text-2xl font-bold text-blue-800 text-center">BeatSense</h1>
+            </div>
+            <div id="progress-indicator" class="text-center text-base font-medium text-blue-700 mt-2"></div>
         </div>
 
         <!-- Main Content Area -->
-        <div class="flex-grow p-6 md:p-10">
+        <div class="flex-grow p-6 md:p-10" id="main-content-area"> <!-- Added ID for hero section -->
 
-            <!-- SECTION 1: Welcome -->
+            <!-- SECTION 1: Welcome (NEW: Hero Section from Design Guide) -->
             <section id="section-1" class="wizard-section active flex-col justify-center items-center text-center">
-                <div class="max-w-xl">
-                    <svg class="w-24 h-24 text-blue-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                    <h2 class="text-4xl font-extrabold text-gray-900 mt-4">Welcome to BeatSense</h2>
-                    <p class="mt-4 text-xl text-gray-600">Your advanced solution for Python-based ECG arrhythmia detection.</p>
-                    <button id="get-started-btn" class="btn-primary mt-10">Get Started</button>
+                <!-- This section's padding is removed to allow the hero to fill the space -->
+                <!-- We must manually set the min-height here to override the parent's padding -->
+                <div class="relative w-full h-full rounded-lg overflow-hidden flex items-center justify-center" style="min-height: 80vh; margin: -2.5rem;"> <!-- Negative margin to fill parent padding -->
+                    <!-- Background Gradient -->
+                    <div class="absolute inset-0 hero-gradient"></div>
+                    
+                    <!-- Animated SVG Graph -->
+                    <svg class="absolute inset-0 w-full h-full opacity-30" width="800" height="300" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice" aria-label="A stylized ECG waveform graph">
+                        <defs>
+                            <pattern id="grid-minor" width="10" height="10" patternUnits="userSpaceOnUse">
+                                <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#ffffff" stroke-width="0.2"/>
+                            </pattern>
+                            <pattern id="grid-major" width="50" height="50" patternUnits="userSpaceOnUse">
+                                <rect width="50" height="50" fill="url(#grid-minor)"/>
+                                <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#ffffff" stroke-width="0.4"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid-major)" />
+                        <!-- Hardcoded animated path based on design -->
+                        <path class="ecg-line-animated" fill="none" stroke="#ffffff" stroke-width="2"
+                            d="M0,150 C40,150 50,150 60,150 L65,145 C70,130 80,80 90,140 S100,220 110,150 L115,145 C120,130 130,150 140,150 L240,150 C250,150 255,145 260,130 C270,80 280,140 290,220 S300,150 310,150 L315,145 C320,130 330,150 340,150 L440,150 C450,150 455,145 460,130 C470,80 480,140 490,220 S500,150 510,150 L515,145 C520,130 530,150 540,150 L640,150 C650,150 655,145 660,130 C670,80 680,140 690,220 S700,150 710,150 L715,145 C720,130 730,150 740,150 L800,150"/>
+                    </svg>
+
+                    <!-- Overlay Content -->
+                    <div class="relative z-10 p-8">
+                        <h2 class="text-5xl font-extrabold text-white mt-4">Welcome to BeatSense</h2>
+                        <p class="mt-4 text-xl text-white font-bold">Your advanced solution for Python-based ECG arrhythmia detection.</p>
+                        <button id="get-started-btn" class="btn-hero mt-10 shadow-lg">
+                            <span>Get Started</span>
+                            <!-- Right Arrow Icon -->
+                            <svg class="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                        </button>
+                    </div>
                 </div>
             </section>
 
-            <!-- SECTION 2: Introduction & Working Principle (COMBINED) -->
+            <!-- SECTION 2: Introduction & Working Principle -->
             <section id="section-2" class="wizard-section flex-col justify-center">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Introduction & How It Works</h2>
                 <div class="prose max-w-none text-gray-700">
@@ -99,7 +152,7 @@
                 </div>
             </section>
 
-            <!-- SECTION 3: Terms and Conditions -->
+            <!-- SECTION 3: Terms and Conditions (New: blue) -->
             <section id="section-3" class="wizard-section flex-col justify-center">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Terms & Conditions</h2>
                 <div class="prose max-w-none h-64 overflow-y-auto border border-gray-300 rounded-lg p-4 bg-gray-50 text-gray-700">
@@ -117,7 +170,7 @@
                 </div>
             </section>
 
-            <!-- SECTION 4: Choose Feature (NEW) -->
+            <!-- SECTION 4: Choose Feature (New: blue) -->
             <section id="section-4" class="wizard-section flex-col justify-center">
                 <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Choose Your Path</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
@@ -136,22 +189,22 @@
                 </div>
             </section>
             
-            <!-- SECTION 5: Patient Info (NEW - Upload Path 1) -->
+            <!-- SECTION 5: Patient Info (New: blue) -->
             <section id="section-5" class="wizard-section flex-col justify-center">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Patient Information</h2>
                 <p class="text-gray-600 mb-6">This information is optional and used for labeling your analysis. It is not stored or transmitted.</p>
                 <form id="patient-info-form" class="space-y-4 max-w-lg">
                     <div>
                         <label for="patient-id" class="block text-sm font-medium text-gray-700">Patient ID / Name</label>
-                        <input type="text" id="patient-id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" id="patient-id" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label for="patient-age" class="block text-sm font-medium text-gray-700">Age</label>
-                        <input type="number" id="patient-age" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <input type="number" id="patient-age" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
                     <div>
                         <label for="patient-gender" class="block text-sm font-medium text-gray-700">Gender</label>
-                        <select id="patient-gender" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <select id="patient-gender" class="mt-1 block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Prefer not to say</option>
                             <option value="male">Male</option>
                             <option value="female">Female</option>
@@ -161,7 +214,7 @@
                 </form>
             </section>
 
-            <!-- SECTION 6: Upload Section (Upload Path 2) -->
+            <!-- SECTION 6: Upload Section (New: blue) -->
             <section id="section-6" class="wizard-section flex-col justify-center">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Analyze Your Own ECG</h2>
                 <p class="text-gray-600 mb-6">Upload your ECG file (<code>.mat</code>, <code>.csv</code>, <code>.txt</code>). Ensure the file contains a single column of raw signal data.</p>
@@ -170,17 +223,16 @@
                     <!-- File Input -->
                     <div class="flex-1">
                         <label for="file-upload" class="block text-sm font-medium text-gray-700">Upload File</label>
-                        <input id="file-upload" type="file" class="mt-1 block w-full text-sm text-gray-500 file:cursor-pointer file:border-0 file:rounded-md file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        <input id="file-upload" type="file" class="mt-1 block w-full text-sm text-gray-500 file:cursor-pointer file:border-0 file:rounded-lg file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                     </div>
                     <!-- Analyze Button -->
                     <div class="flex-shrink-0 pt-6">
                         <button id="upload-analyze-btn" class="btn-primary w-full">Analyze File</button>
                     </div>
                 </div>
-                <!-- Note: The 'upload-analysis-output' div was removed from here and combined into Section 8 -->
             </section>
             
-            <!-- SECTION 7: Live Demo (Demo Path) -->
+            <!-- SECTION 7: Live Demo (Demo Path) (New: blue) -->
             <section id="section-7" class="wizard-section flex-col justify-center">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Live Demo: MIT-BIH Database</h2>
                 <p class="text-gray-600 mb-6">Explore pre-computed results from the MIT-BIH Arrhythmia Database. Select a record to view its analysis.</p>
@@ -189,7 +241,7 @@
                     <!-- Record Selection -->
                     <div class="flex-1">
                         <label for="record-select" class="block text-sm font-medium text-gray-700">Select Record</label>
-                        <select id="record-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                        <select id="record-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg">
                             <option value="">-- Choose a record --</option>
                             <option value="100">Record 100</option>
                             <option value="101">Record 101</option>
@@ -246,14 +298,12 @@
                         <button id="analyze-btn" class="btn-primary w-full">Analyze Record</button>
                     </div>
                 </div>
-                <!-- Note: The 'analysis-output' div was removed from here and combined into Section 8 -->
             </section>
             
-            <!-- SECTION 8: Results and Recommendation (NEW) -->
+            <!-- SECTION 8: Results and Recommendation (New: blue) -->
             <section id="section-8" class="wizard-section flex-col justify-center">
                 <h2 class="text-3xl font-bold text-gray-900 mb-4">Analysis Results & Recommendation</h2>
                 
-                <!-- This 'analysis-output' container is now shared by both Demo and Upload -->
                 <div id="analysis-output" class="w-full">
                     <!-- Loading Spinner -->
                     <div id="loading-spinner" class="text-center p-10 hidden">
@@ -265,15 +315,15 @@
                     </div>
                     
                     <!-- Error Message -->
-                    <div id="error-message" class="hidden p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                    <div id="error-message" class="hidden p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
                         <p><strong>Error:</strong> <span id="error-text"></span></p>
                     </div>
 
                     <!-- Results -->
                     <div id="results-container" class="hidden">
                         
-                        <!-- Recommendation Panel (NEW) -->
-                        <div id="recommendation-panel" class="p-4 rounded-md mb-6 shadow">
+                        <!-- Recommendation Panel -->
+                        <div id="recommendation-panel" class="p-4 rounded-lg mb-6 shadow">
                             <h3 class="text-lg font-semibold mb-2 flex items-center">
                                 <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                                 <span id="recommendation-title">Analysis Summary</span>
@@ -282,11 +332,11 @@
                         </div>
                         
                         <!-- Chart Container -->
-                        <div class="bg-gray-50 p-4 rounded-lg shadow-inner mb-6">
+                        <div class="bg-gray-50 p-4 rounded-lg shadow-inner mb-6 border border-gray-200">
                             <canvas id="ecg-chart" width="400" height="200"></canvas>
                         </div>
                         
-                        <!-- Stats -->
+                        <!-- Stats (New: blue theme) -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                             <div class="bg-blue-100 p-4 rounded-lg">
                                 <h4 class="text-sm font-medium text-blue-800">Avg. Heart Rate</h4>
@@ -344,21 +394,14 @@
 
     <!-- 
     ====================================================================
-    JAVASCRIPT
+    JAVASCRIPT (main.js)
     ====================================================================
     -->
-
     <script>
-        /**
-         * ----------------------------------------------------------------
-         * /static/js/main.js (Simulated)
-         * ----------------------------------------------------------------
-         * Handles the wizard navigation, UI state, and T&C logic.
-         */
         document.addEventListener('DOMContentLoaded', () => {
             // --- State ---
             let currentSection = 1;
-            let previousSection = 1; // For back-button logic from results
+            let previousSection = 1; 
             const totalSections = 8;
             
             // --- Elements ---
@@ -372,6 +415,7 @@
             const getStartedBtn = document.getElementById('get-started-btn');
             const uploadPathBtn = document.getElementById('upload-path-btn');
             const demoPathBtn = document.getElementById('demo-path-btn');
+            const mainContentArea = document.getElementById('main-content-area');
 
             // --- Section Titles (for progress indicator) ---
             const sectionTitles = [
@@ -380,37 +424,34 @@
             ];
 
             // --- Functions ---
-
-            /**
-             * Updates the UI to show the correct section and button states.
-             * @param {number} sectionNumber - The 1-based index of the section to show.
-             */
             function updateUI(sectionNumber) {
                 if (sectionNumber < 1 || sectionNumber > totalSections) return;
                 
                 previousSection = currentSection;
                 currentSection = sectionNumber;
                 
-                // Update sections
                 sections.forEach((section, index) => {
                     section.classList.toggle('active', index + 1 === currentSection);
                 });
 
-                // Update progress indicator
                 progressIndicator.textContent = `Step ${currentSection} of ${totalSections}: ${sectionTitles[currentSection - 1]}`;
+                
+                // NEW: Remove padding for hero section
+                if (currentSection === 1) {
+                    mainContentArea.classList.remove('p-6', 'md:p-10');
+                } else {
+                    mainContentArea.classList.add('p-6', 'md:p-10');
+                }
 
                 // --- Button/Footer Visibility Logic ---
-                
-                // By default, show footer and next, hide restart
                 footer.classList.remove('hidden');
                 nextBtn.style.display = 'inline-flex';
                 restartBtn.classList.add('hidden');
                 
-                // Specific Section Logic
                 switch (currentSection) {
                     case 1: // Welcome
                         prevBtn.disabled = true;
-                        footer.classList.add('hidden'); // Hide footer on welcome
+                        footer.classList.add('hidden');
                         break;
                     case 3: // Terms
                         prevBtn.disabled = false;
@@ -418,7 +459,7 @@
                         break;
                     case 4: // Choose Feature
                         prevBtn.disabled = false;
-                        footer.classList.add('hidden'); // Hide footer, use in-page buttons
+                        footer.classList.add('hidden');
                         break;
                     case 5: // Patient Info
                         prevBtn.disabled = false;
@@ -426,15 +467,15 @@
                         break;
                     case 6: // Upload File
                         prevBtn.disabled = false;
-                        nextBtn.style.display = 'none'; // Must click "Analyze"
+                        nextBtn.style.display = 'none';
                         break;
                     case 7: // Demo Analysis
                         prevBtn.disabled = false;
-                        nextBtn.style.display = 'none'; // Must click "Analyze"
+                        nextBtn.style.display = 'none';
                         break;
                     case 8: // Results
-                        footer.classList.add('hidden'); // Hide footer
-                        restartBtn.classList.remove('hidden'); // Show restart button
+                        footer.classList.add('hidden');
+                        restartBtn.classList.remove('hidden');
                         break;
                     default:
                         prevBtn.disabled = false;
@@ -442,101 +483,74 @@
                 }
             }
             
-            // Expose updateUI to the global scope so analyze.js can call it
             window.navigateToWizardSection = updateUI;
 
-            /**
-             * Handles click events for "Next" button. (Linear path)
-             */
             function goToNext() {
                 let nextSection = currentSection + 1;
-                // Skip non-linear steps
-                if (currentSection === 3) nextSection = 4; // 3 -> 4
-                if (currentSection === 5) nextSection = 6; // 5 -> 6 (Upload path)
+                if (currentSection === 3) nextSection = 4;
+                if (currentSection === 5) nextSection = 6;
                 updateUI(nextSection);
             }
             
-            /**
-             * Handles click events for "Previous" button. (Smart logic)
-             */
             function goToPrev() {
                 let prevSection = currentSection - 1;
-                // Handle branching
-                if (currentSection === 5) prevSection = 4; // 5 -> 4
-                if (currentSection === 7) prevSection = 4; // 7 -> 4
-                if (currentSection === 8) prevSection = previousSection; // Go back to 6 or 7
+                if (currentSection === 5) prevSection = 4;
+                if (currentSection === 7) prevSection = 4;
+                if (currentSection === 8) prevSection = previousSection;
                 updateUI(prevSection);
             }
 
             // --- Event Listeners ---
-            
-            // Main navigation
             nextBtn.addEventListener('click', goToNext);
             prevBtn.addEventListener('click', goToPrev);
-            
-            // Welcome screen "Get Started" button
             getStartedBtn.addEventListener('click', () => updateUI(2));
-
-            // T&C Checkbox
             termsCheckbox.addEventListener('change', () => {
-                if (currentSection === 3) {
-                    nextBtn.disabled = !termsCheckbox.checked;
-                }
+                if (currentSection === 3) nextBtn.disabled = !termsCheckbox.checked;
             });
-            
-            // Branching buttons
-            uploadPathBtn.addEventListener('click', () => updateUI(5)); // Go to Patient Info
-            demoPathBtn.addEventListener('click', () => updateUI(7));   // Go to Demo
-
-            // Restart Button
+            uploadPathBtn.addEventListener('click', () => updateUI(5));
+            demoPathBtn.addEventListener('click', () => updateUI(7));
             restartBtn.addEventListener('click', () => {
                 termsCheckbox.checked = false;
-                updateUI(4); // Go back to "Choose Feature"
-            });
+                updateUI(4);
+S            });
 
-            // Initial UI setup
             updateUI(1);
         });
     </script>
     
+    <!-- 
+    ====================================================================
+    JAVASCRIPT (analyze.js)
+    ====================================================================
+    -->
     <script>
-        /**
-         * ----------------------------------------------------------------
-         * /static/js/analyze.js (Simulated)
-         * ----------------------------------------------------------------
-         * Handles the ECG analysis, API calls, and Chart.js plotting.
-         */
         document.addEventListener('DOMContentLoaded', () => {
             
             // --- State ---
-            let ecgChart = null; // Holds the Chart.js instance
-            let isAnalyzing = false; // Lock to prevent multiple requests
+            let ecgChart = null; 
+            let isAnalyzing = false;
             
-            // --- Global Elements (Now in Section 8) ---
+            // --- Global Elements (Section 8) ---
             const outputContainer = document.getElementById('analysis-output');
             const spinner = document.getElementById('loading-spinner');
             const errorMsg = document.getElementById('error-message');
             const errorText = document.getElementById('error-text');
             const resultsContainer = document.getElementById('results-container');
             const chartCanvas = document.getElementById('ecg-chart');
-            // Stats
             const bpmDisplay = document.getElementById('bpm-display');
             const beatsDisplay = document.getElementById('beats-display');
             const lengthDisplay = document.getElementById('length-display');
-            // Table
             const classTable = document.getElementById('class-table-body');
-            // Recommendation
             const recommendationPanel = document.getElementById('recommendation-panel');
             const recommendationTitle = document.getElementById('recommendation-title');
             const recommendationText = document.getElementById('recommendation-text');
 
-            // --- Section-Specific Trigger Elements ---
+            // --- Triggers ---
             const demoRecordSelect = document.getElementById('record-select');
             const demoAnalyzeBtn = document.getElementById('analyze-btn');
             const uploadFileInput = document.getElementById('file-upload');
             const uploadAnalyzeBtn = document.getElementById('upload-analyze-btn');
 
-            // --- Beat Symbol Explanations ---
             const BEAT_EXPLANATIONS = {
                 'N': 'Normal beat', 'L': 'Left bundle branch block', 'R': 'Right bundle branch block',
                 'V': 'Premature ventricular contraction', 'A': 'Atrial premature beat',
@@ -546,42 +560,24 @@
             };
 
             // --- Functions ---
-
-            /**
-             * Resets the shared analysis UI to its initial state.
-             */
             function resetAnalysisUI() {
                 console.log("Resetting analysis UI...");
-                
-                // Hide all output sections
                 outputContainer.classList.add('hidden');
                 spinner.classList.add('hidden');
                 errorMsg.classList.add('hidden');
                 resultsContainer.classList.add('hidden');
-                
-                // Reset text content
                 bpmDisplay.textContent = '--';
                 beatsDisplay.textContent = '--';
                 lengthDisplay.textContent = '--';
                 classTable.innerHTML = '';
                 errorText.textContent = '';
                 recommendationText.textContent = '';
-                
-                // Destroy old chart
-                if (ecgChart) {
-                    ecgChart.destroy();
-                    ecgChart = null;
-                }
-                
-                // Re-enable the button and reset state
+                if (ecgChart) { ecgChart.destroy(); ecgChart = null; }
                 isAnalyzing = false;
                 demoAnalyzeBtn.disabled = false;
                 uploadAnalyzeBtn.disabled = false;
             }
 
-            /**
-             * Sets the UI to a loading state.
-             */
             function showLoading() {
                 isAnalyzing = true;
                 outputContainer.classList.remove('hidden');
@@ -590,99 +586,59 @@
                 resultsContainer.classList.add('hidden');
             }
 
-            /**
-             * Fetches and analyzes data from the selected MIT-BIH record.
-             */
             async function handleDemoAnalyze() {
                 if (isAnalyzing) return;
-                
                 const recordName = demoRecordSelect.value;
-                if (!recordName) {
-                    alert("Please select a record first.");
-                    return;
-                }
-
+                if (!recordName) { alert("Please select a record first."); return; }
                 demoAnalyzeBtn.disabled = true;
                 showLoading();
 
                 try {
-                    // --- SIMULATED API CALL ---
                     console.log(`Simulating analysis for record: ${recordName}`);
                     await new Promise(resolve => setTimeout(resolve, 1500));
                     const data = simulateAnalysisData(recordName);
                     if (recordName === '108') throw new Error("Simulated load failure for record 108.");
-                    // --- END SIMULATION ---
-                    
-                    // const response = await fetch(`/analyze_mit?record=${recordName}`);
-                    // if (!response.ok) { ... }
-                    // const data = await response.json();
-
                     displayResults(data);
-                    window.navigateToWizardSection(8); // Go to results
-
+                    window.navigateToWizardSection(8);
                 } catch (error) {
                     displayError(error.message);
-                    window.navigateToWizardSection(8); // Go to results (to show error)
+                    window.navigateToWizardSection(8);
                 } 
             }
             
-            /**
-             * Analyzes an uploaded user file.
-             */
             async function handleUploadAnalyze() {
                 if (isAnalyzing) return;
-                
                 const file = uploadFileInput.files[0];
-                if (!file) {
-                    alert("Please select a file first.");
-                    return;
-                }
-
+                if (!file) { alert("Please select a file first."); return; }
                 uploadAnalyzeBtn.disabled = true;
                 showLoading();
                 
                 const formData = new FormData();
                 formData.append('file', file);
-                // Append patient info
                 formData.append('patient_id', document.getElementById('patient-id').value);
                 formData.append('patient_age', document.getElementById('patient-age').value);
                 formData.append('patient_gender', document.getElementById('patient-gender').value);
 
                 try {
-                    // --- SIMULATED API CALL ---
                     console.log(`Simulating analysis for file: ${file.name}`);
                     await new Promise(resolve => setTimeout(resolve, 1500));
                     const data = simulateAnalysisData(file.name);
-                    // --- END SIMULATION ---
-                    
-                    // const response = await fetch('/analyze_file', { method: 'POST', body: formData });
-                    // if (!response.ok) { ... }
-                    // const data = await response.json();
-
                     displayResults(data);
-                    window.navigateToWizardSection(8); // Go to results
-
+                    window.navigateToWizardSection(8);
                 } catch (error) {
                     displayError(error.message);
-                    window.navigateToWizardSection(8); // Go to results (to show error)
+                    window.navigateToWizardSection(8);
                 }
             }
 
-            /**
-             * Displays the analysis results in the UI.
-             * @param {object} data - The data from the API.
-             */
             function displayResults(data) {
                 spinner.classList.add('hidden');
                 resultsContainer.classList.remove('hidden');
-
-                // Fill stats
                 bpmDisplay.textContent = data.bpm || '--';
                 beatsDisplay.textContent = data.r_peaks ? data.r_peaks.length : '--';
                 lengthDisplay.textContent = data.record_length_sec || '--';
                 
-                // Fill table
-                classTable.innerHTML = ''; // Clear old data
+                classTable.innerHTML = '';
                 if (data.beat_counts && Object.keys(data.beat_counts).length > 0) {
                     for (const [symbol, count] of Object.entries(data.beat_counts)) {
                         const row = document.createElement('tr');
@@ -697,19 +653,12 @@
                     classTable.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">No classification data available.</td></tr>';
                 }
 
-                // Render chart
                 if (data.signal && data.r_peaks) {
                     renderChart(data.signal, data.r_peaks, chartCanvas);
                 }
-                
-                // Generate Recommendation
                 generateRecommendation(data);
             }
             
-            /**
-             * Generates a simple recommendation based on results.
-             * @param {object} data - The data from the API.
-             */
             function generateRecommendation(data) {
                 let title = "Analysis Complete";
                 let text = "The ECG analysis is complete. All metrics appear within normal ranges for this segment.";
@@ -733,28 +682,24 @@
                     panelClass = "bg-red-100 border-red-300 text-red-800";
                 }
                 
-                recommendationPanel.className = `p-4 rounded-md mb-6 shadow ${panelClass}`;
+                recommendationPanel.className = `p-4 rounded-lg mb-6 shadow ${panelClass}`;
                 recommendationTitle.textContent = title;
                 recommendationText.textContent = text;
             }
 
-            /**
-             * Displays an error message in the UI.
-             * @param {string} message - The error message.
-             */
             function displayError(message) {
                 spinner.classList.add('hidden');
                 errorMsg.classList.remove('hidden');
                 errorText.textContent = message;
                 
-                // Show error in recommendation panel
-                recommendationPanel.className = "p-4 rounded-md mb-6 shadow bg-red-100 border-red-300 text-red-800";
+                recommendationPanel.className = "p-4 rounded-lg mb-6 shadow bg-red-100 border-red-300 text-red-800";
                 recommendationTitle.textContent = "Analysis Failed";
                 recommendationText.textContent = "Could not complete the analysis. Please check the file or try again.";
             }
 
             /**
              * Renders the ECG chart using Chart.js.
+             * NEW: Color updated to blue.
              */
             function renderChart(signal, rPeaks, canvas) {
                 if (ecgChart) ecgChart.destroy();
@@ -768,20 +713,34 @@
                         labels: labels,
                         datasets: [
                             {
-                                label: 'ECG Signal', data: signal, borderColor: 'rgb(59, 130, 246)',
-                                borderWidth: 1.5, pointRadius: 0, tension: 0.1
+                                label: 'ECG Signal', 
+                                data: signal, 
+                                borderColor: 'rgb(59, 130, 246)', // blue-600
+                                borderWidth: 1.5, 
+                                pointRadius: 0, 
+                                tension: 0.1
                             },
                             {
-                                type: 'scatter', label: 'R-Peaks', data: rPeakData,
-                                backgroundColor: 'rgb(239, 68, 68)', pointRadius: 5
+                                type: 'scatter', 
+                                label: 'R-Peaks', 
+                                data: rPeakData,
+                                backgroundColor: 'rgb(239, 68, 68)', // red-500
+                                pointRadius: 5
                             }
                         ]
                     },
                     options: {
                         responsive: true, maintainAspectRatio: true, animation: false,
                         scales: {
-                            x: { title: { display: true, text: 'Sample Index' }, ticks: { maxTicksLimit: 20 } },
-                            y: { title: { display: true, text: 'Amplitude (mV)' } }
+                            x: { 
+                                title: { display: true, text: 'Sample Index' }, 
+                                ticks: { maxTicksLimit: 20 },
+                                grid: { color: 'rgba(226, 232, 240, 0.7)' }
+                            },
+                            y: { 
+                                title: { display: true, text: 'Amplitude (mV)' },
+                                grid: { color: 'rgba(226, 232, 240, 0.7)' }
+                            }
                         },
                         plugins: { legend: { position: 'top' }, tooltip: { enabled: true, mode: 'index', intersect: false } },
                         interaction: { mode: 'nearest', axis: 'x', intersect: false }
@@ -805,7 +764,7 @@
                 }
                 const beat_counts = {'N': 8, 'V': 2};
                 if (recordName.includes('101')) {
-                    beat_counts['V'] = 0; // Simulate a "normal" record
+                    beat_counts['V'] = 0; 
                 }
                 return {
                     record_name: recordName, bpm: recordName.includes('101') ? 72 : 95, r_peaks: rPeaks,
@@ -815,12 +774,8 @@
             }
 
             // --- Event Listeners ---
-            
-            // Reset UI when a new selection is made
             demoRecordSelect.addEventListener('change', resetAnalysisUI);
             uploadFileInput.addEventListener('change', resetAnalysisUI);
-
-            // Analyze button clicks
             demoAnalyzeBtn.addEventListener('click', handleDemoAnalyze);
             uploadAnalyzeBtn.addEventListener('click', handleUploadAnalyze);
         });
