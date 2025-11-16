@@ -1,204 +1,196 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BeatSense: Python-Based Arrhythmia Detection</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js for plotting ECG -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; 
+            background-color: #f8fafc; /* Light gray background */
         }
-        .hero-gradient {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+        
+        /* Hide all sections by default */
+        .wizard-section {
+            display: none;
+            min-height: 80vh;
+            animation: fadeIn 0.5s ease-in-out;
         }
-        .section-title {
-            @apply text-3xl md:text-4xl font-extrabold text-gray-800 mb-3 text-center;
-        }
-        .section-subtitle {
-            @apply text-lg text-gray-600 mb-12 text-center max-w-3xl mx-auto;
-        }
-        .card {
-            @apply bg-white rounded-xl shadow-lg p-6 transition-transform transform hover:-translate-y-2 duration-300;
-        }
-        .team-member-card {
-            @apply bg-white rounded-xl shadow-md p-6 text-center transition-all duration-300 hover:shadow-xl hover:scale-105;
-        }
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 4px solid #3b82f6;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .phase-card::before {
-            content: attr(data-phase);
-            position: absolute;
-            top: -1.5rem;
-            left: -1.5rem;
-            width: 3rem;
-            height: 3rem;
-            background-color: #dbeafe;
-            color: #1e3a8a;
-            border-radius: 9999px;
+        
+        /* Show the active section */
+        .wizard-section.active {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.125rem;
-            border: 4px solid white;
         }
-        /* ECG Chart Animation */
-        .ecg-line {
-            stroke-dasharray: 3000;
-            stroke-dashoffset: 3000;
-            animation: draw-ecg 2s ease-out forwards;
-            animation-delay: 0.2s;
+
+        /* Simple fade-in animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes draw-ecg {
-            to {
-                stroke-dashoffset: 0;
-            }
+
+        /* Custom styles for buttons */
+        .btn-primary {
+            @apply inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+        }
+        
+        .btn-secondary {
+            @apply inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all;
+        }
+        
+        /* Custom styles for file input */
+        input[type="file"]::file-selector-button {
+            @apply px-4 py-2 mr-4 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 cursor-pointer transition-all;
+        }
+        
+        /* Styles for the "Choose Feature" cards */
+        .feature-card {
+            @apply flex flex-col items-center p-8 bg-gray-50 rounded-lg border border-gray-200 hover:shadow-lg hover:border-blue-300 transition-all cursor-pointer;
         }
     </style>
 </head>
-<body class="text-gray-700">
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
 
-    <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
-        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-gray-800">
-                <span class="text-blue-600">Beat</span>Sense 🩺
-            </a>
-            <div class="hidden md:flex space-x-8">
-                <a href="#home" class="text-gray-600 hover:text-blue-600 transition font-medium">Home</a>
-                <a href="#introduction" class="text-gray-600 hover:text-blue-600 transition font-medium">Introduction</a>
-                <a href="#methodology" class="text-gray-600 hover:text-blue-600 transition font-medium">Methodology</a>
-                <a href="#live-demo" class="text-gray-600 hover:text-blue-600 transition font-medium">Live Demo</a>
-                <a href="#team" class="text-gray-600 hover:text-blue-600 transition font-medium">The Team</a>
-            </div>
-             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:text-blue-600 hover:bg-gray-100 focus:outline-none">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-        </nav>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-             <a href="#home" class="block py-2 text-gray-600 hover:text-blue-600 transition font-medium">Home</a>
-             <a href="#introduction" class="block py-2 text-gray-600 hover:text-blue-600 transition font-medium">Introduction</a>
-             <a href="#methodology" class="block py-2 text-gray-600 hover:text-blue-600 transition font-medium">Methodology</a>
-             <a href="#live-demo" class="block py-2 text-gray-600 hover:text-blue-600 transition font-medium">Live Demo</a>
-             <a href="#team" class="block py-2 text-gray-600 hover:text-blue-600 transition font-medium">The Team</a>
+    <!-- Main Wizard Container -->
+    <div class="w-full max-w-5xl bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col">
+
+        <!-- Header / Progress Bar -->
+        <div class="p-4 bg-gray-50 border-b border-gray-200">
+            <h1 class="text-2xl font-bold text-blue-800 text-center">BeatSense</h1>
+            <div id="progress-indicator" class="text-center text-sm text-gray-500 mt-2"></div>
         </div>
-    </header>
 
-    <main>
-        <!-- Hero Section -->
-        <section id="home" class="hero-gradient text-white relative overflow-hidden">
-             <div class="absolute inset-0 bg-black opacity-10"></div>
-            <div class="container mx-auto px-6 py-24 md:py-32 text-center relative z-10">
-                <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">BeatSense: Python-Based Arrhythmia Detection</h1>
-                <p class="text-xl md:text-2xl mb-10 max-w-4xl mx-auto text-blue-100">
-                    A software-based system for ECG signal processing to detect and classify cardiac arrhythmias using digital signal processing and machine learning.
-                </p>
-                <a href="#live-demo" class="bg-white text-blue-700 font-bold py-4 px-10 rounded-full text-lg hover:bg-blue-100 transition-all duration-300 transform hover:scale-105 shadow-2xl">
-                    Try the Live Demo
-                </a>
-            </div>
-        </section>
+        <!-- Main Content Area -->
+        <div class="flex-grow p-6 md:p-10">
 
-        <!-- Introduction Section -->
-        <section id="introduction" class="py-24 bg-white">
-            <div class="container mx-auto px-6">
-                <h2 class="section-title">Introduction</h2>
-                <p class="section-subtitle">Understanding the challenge and our innovative solution.</p>
-                <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-16 items-center">
-                    <div class="space-y-6">
-                         <div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center gap-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                                The Problem
-                            </h3>
-                            <p class="text-lg text-gray-600">Cardiovascular Diseases are the leading cause of death globally. Traditional ECG interpretation is slow, manual, and often inaccessible, delaying crucial diagnoses of arrhythmias and putting lives at risk.</p>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center gap-3">
-                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.375 3.375 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-                                Our Solution: BeatSense
-                            </h3>
-                            <p class="text-lg text-gray-600">We developed <span class="font-bold text-blue-600">BeatSense</span>, an automated system that uses Python and machine learning to analyze ECG signals. It provides a fast, reliable, and cost-effective way to detect and classify arrhythmias like Bradycardia and Tachycardia, making early detection more accessible.</p>
-                        </div>
+            <!-- SECTION 1: Welcome -->
+            <section id="section-1" class="wizard-section active flex-col justify-center items-center text-center">
+                <div class="max-w-xl">
+                    <svg class="w-24 h-24 text-blue-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    <h2 class="text-4xl font-extrabold text-gray-900 mt-4">Welcome to BeatSense</h2>
+                    <p class="mt-4 text-xl text-gray-600">Your advanced solution for Python-based ECG arrhythmia detection.</p>
+                    <button id="get-started-btn" class="btn-primary mt-10">Get Started</button>
+                </div>
+            </section>
+
+            <!-- SECTION 2: Introduction & Working Principle (COMBINED) -->
+            <section id="section-2" class="wizard-section flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Introduction & How It Works</h2>
+                <div class="prose max-w-none text-gray-700">
+                    <p>BeatSense is a powerful tool designed to analyze Electrocardiogram (ECG) signals for potential arrhythmias. By leveraging advanced signal processing algorithms in Python, we provide a fast, accessible, and insightful look into cardiac health.</p>
+                    <p>Our platform allows you to:</p>
+                    <ul class="list-disc pl-5">
+                        <li>Analyze your own ECG files (MAT, CSV, TXT).</li>
+                        <li>Explore pre-computed results from the renowned MIT-BIH Arrhythmia Database.</li>
+                    </ul>
+                    <p class="font-semibold">Our analysis pipeline is a multi-step process:</p>
+                    <ol class="list-decimal pl-5">
+                        <li><strong>Data Loading:</strong> The tool accepts <code>.mat</code>, <code>.csv</code>, or <code>.txt</code> files.</li>
+                        <li><strong>Preprocessing:</strong> The raw signal is filtered to remove noise (like baseline wander).</li>
+                        <li><strong>R-Peak Detection:</strong> We employ a robust algorithm to accurately identify the R-peaks.</li>
+                        <li><strong>Heart Rate Calculation:</strong> The time intervals between R-peaks (RR-intervals) are calculated and converted into a beat-per-minute (BPM) heart rate.</li>
+                        <li><strong>Visualization:</strong> The processed signal, detected R-peaks, and analysis results are plotted for your review.</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- SECTION 3: Terms and Conditions -->
+            <section id="section-3" class="wizard-section flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Terms & Conditions</h2>
+                <div class="prose max-w-none h-64 overflow-y-auto border border-gray-300 rounded-lg p-4 bg-gray-50 text-gray-700">
+                    <p><strong>IMPORTANT: For Educational & Research Use Only.</strong></p>
+                    <p>BeatSense is NOT a medical device and is NOT intended for medical diagnosis, treatment, or prevention of any disease. The analysis provided by this tool is not a substitute for professional medical advice.</p>
+                    <ul class="list-disc pl-5">
+                        <li>You will not use this tool for any clinical or diagnostic decision-making.</li>
+                        <li>The developers and providers of BeatSense are not liable for any damages arising from the use of this tool.</li>
+                        <li>Do not upload any personally identifiable health information (PHI).</li>
+                    </ul>
+                </div>
+                <div class="mt-6 flex items-center">
+                    <input id="terms-accept" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label for="terms-accept" class="ml-2 block text-sm text-gray-900">I have read, understood, and agree to the Terms & Conditions.</label>
+                </div>
+            </section>
+
+            <!-- SECTION 4: Choose Feature (NEW) -->
+            <section id="section-4" class="wizard-section flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">Choose Your Path</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                    <!-- Upload Path -->
+                    <div id="upload-path-btn" class="feature-card">
+                        <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        <h3 class="text-xl font-semibold text-gray-900 mt-4">Upload Your Own ECG</h3>
+                        <p class="text-gray-600 text-center mt-2">Analyze a <code>.mat</code>, <code>.csv</code>, or <code>.txt</code> file from your device.</p>
                     </div>
-                     <div class="bg-gray-100 p-8 rounded-2xl shadow-inner">
-                        <img src="https://i.imgur.com/8Q9Z3cr.png" alt="BeatSense Research Framework Flowchart" class="mx-auto rounded-lg shadow-lg">
-                        <p class="text-center text-sm text-gray-500 mt-4">The Proposed Research Framework</p>
+                    <!-- Demo Path -->
+                    <div id="demo-path-btn" class="feature-card">
+                        <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        <h3 class="text-xl font-semibold text-gray-900 mt-4">Try a Demo Analysis</h3>
+                        <p class="text-gray-600 text-center mt-2">Explore pre-computed results from the MIT-BIH Arrhythmia Database.</p>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+            
+            <!-- SECTION 5: Patient Info (NEW - Upload Path 1) -->
+            <section id="section-5" class="wizard-section flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Patient Information</h2>
+                <p class="text-gray-600 mb-6">This information is optional and used for labeling your analysis. It is not stored or transmitted.</p>
+                <form id="patient-info-form" class="space-y-4 max-w-lg">
+                    <div>
+                        <label for="patient-id" class="block text-sm font-medium text-gray-700">Patient ID / Name</label>
+                        <input type="text" id="patient-id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="patient-age" class="block text-sm font-medium text-gray-700">Age</label>
+                        <input type="number" id="patient-age" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="patient-gender" class="block text-sm font-medium text-gray-700">Gender</label>
+                        <select id="patient-gender" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Prefer not to say</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </form>
+            </section>
 
-        <!-- Methodology Section -->
-        <section id="methodology" class="py-24 bg-gray-50">
-            <div class="container mx-auto px-6">
-                <h2 class="section-title">Our Methodology</h2>
-                <p class="section-subtitle">
-                    A quantitative, developmental research design structured into six key phases to build and validate the BeatSense system.
-                </p>
-                <div class="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-                    <!-- Phase 1 -->
-                    <div class="relative card !p-8 pt-10" data-phase="1">
-                        <h4 class="font-bold text-xl text-gray-800 mb-2">Data Acquisition</h4>
-                        <p>ECG recordings are sourced from the MIT-BIH Arrhythmia Database, a standardized and annotated public dataset.</p>
+            <!-- SECTION 6: Upload Section (Upload Path 2) -->
+            <section id="section-6" class="wizard-section flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Analyze Your Own ECG</h2>
+                <p class="text-gray-600 mb-6">Upload your ECG file (<code>.mat</code>, <code>.csv</code>, <code>.txt</code>). Ensure the file contains a single column of raw signal data.</p>
+                
+                <div class="flex flex-col md:flex-row gap-4">
+                    <!-- File Input -->
+                    <div class="flex-1">
+                        <label for="file-upload" class="block text-sm font-medium text-gray-700">Upload File</label>
+                        <input id="file-upload" type="file" class="mt-1 block w-full text-sm text-gray-500 file:cursor-pointer file:border-0 file:rounded-md file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                     </div>
-                    <!-- Phase 2 -->
-                    <div class="relative card !p-8 pt-10" data-phase="2">
-                        <h4 class="font-bold text-xl text-gray-800 mb-2">Preprocessing</h4>
-                        <p>Digital filters are applied to remove noise (baseline wander, etc.) and segment signals into analyzable heartbeats.</p>
-                    </div>
-                    <!-- Phase 3 -->
-                    <div class="relative card !p-8 pt-10" data-phase="3">
-                        <h4 class="font-bold text-xl text-gray-800 mb-2">Feature Extraction</h4>
-                        <p>The system identifies R-peaks, calculates RR intervals, and analyzes waveform morphology to define the heart's rhythm.</p>
-                    </div>
-                    <!-- Phase 4 -->
-                    <div class="relative card !p-8 pt-10" data-phase="4">
-                        <h4 class="font-bold text-xl text-gray-800 mb-2">Classification</h4>
-                        <p>Machine learning algorithms classify heartbeats as normal or arrhythmic (Bradycardia, Tachycardia).</p>
-                    </div>
-                    <!-- Phase 5 -->
-                    <div class="relative card !p-8 pt-10" data-phase="5">
-                        <h4 class="font-bold text-xl text-gray-800 mb-2">Program Implementation</h4>
-                        <p>Built in Python using libraries like NumPy, SciPy for signal processing, and Scikit-learn for machine learning.</p>
-                    </div>
-                    <!-- Phase 6 -->
-                    <div class="relative card !p-8 pt-10" data-phase="6">
-                        <h4 class="font-bold text-xl text-gray-800 mb-2">Performance Evaluation</h4>
-                        <p>Effectiveness is validated quantitatively using accuracy, precision, and other metrics against database annotations.</p>
+                    <!-- Analyze Button -->
+                    <div class="flex-shrink-0 pt-6">
+                        <button id="upload-analyze-btn" class="btn-primary w-full">Analyze File</button>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Live Demo Section -->
-        <section id="live-demo" class="py-24 bg-blue-50">
-            <div class="container mx-auto px-6">
-                <h2 class="section-title">Live Analysis Demo</h2>
-                <p class="section-subtitle">
-                    Select a record from the MIT-BIH Arrhythmia Database to simulate the BeatSense analysis pipeline.
-                </p>
-                <div class="max-w-2xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
-                    <div class="mb-6">
-                        <label for="ecg-record-select" class="block text-lg font-medium text-gray-700 mb-2">Choose a record from the MIT-BIH dataset:</label>
-                        <select id="ecg-record-select" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3">
-                            <option selected value="">Select a Record...</option>
+                <!-- Note: The 'upload-analysis-output' div was removed from here and combined into Section 8 -->
+            </section>
+            
+            <!-- SECTION 7: Live Demo (Demo Path) -->
+            <section id="section-7" class="wizard-section flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Live Demo: MIT-BIH Database</h2>
+                <p class="text-gray-600 mb-6">Explore pre-computed results from the MIT-BIH Arrhythmia Database. Select a record to view its analysis.</p>
+                
+                <div class="flex flex-col md:flex-row gap-4">
+                    <!-- Record Selection -->
+                    <div class="flex-1">
+                        <label for="record-select" class="block text-sm font-medium text-gray-700">Select Record</label>
+                        <select id="record-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option value="">-- Choose a record --</option>
                             <option value="100">Record 100</option>
                             <option value="101">Record 101</option>
                             <option value="102">Record 102</option>
@@ -249,258 +241,589 @@
                             <option value="234">Record 234</option>
                         </select>
                     </div>
-                    <button id="analyze-button" class="w-full bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed" disabled>
-                        Analyze ECG Signal
-                    </button>
-                </div>
-                <!-- Results Area -->
-                <div id="results-area" class="max-w-4xl mx-auto mt-12 hidden">
-                    <div id="loader-container" class="text-center">
-                        <div class="loader mx-auto"></div>
-                        <p class="text-lg text-gray-600 mt-4 font-semibold">Analyzing signal... Please wait.</p>
-                    </div>
-                    <div id="report-container" class="hidden">
-                        <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Analysis Complete: Results</h3>
-                        <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-200 overflow-hidden">
-                           <div id="chart-container" class="bg-white rounded-lg shadow-md mb-8 w-full overflow-hidden">
-                                <!-- SVG Chart will be injected here -->
-                           </div>
-                            <div class="grid md:grid-cols-2 gap-8 items-center">
-                                <!-- Left Side: Data -->
-                                <div class="space-y-4">
-                                    <div class="pb-3 border-b border-gray-200">
-                                        <p class="text-sm text-gray-500">Input File</p>
-                                        <p id="result-file-name" class="font-bold text-lg text-gray-800"><code class="bg-gray-100 text-gray-700 px-2 py-1 rounded-md"></code></p>
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <p class="text-sm text-gray-500">Heart Rate</p>
-                                            <p id="result-bpm" class="font-bold text-xl"></p>
-                                        </div>
-                                        <div>
-                                            <p class="text-sm text-gray-500">Rhythm</p>
-                                            <p id="result-rhythm" class="font-bold text-xl"></p>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-sm text-gray-500">Classification</p>
-                                        <p id="result-classification" class="font-bold text-lg text-gray-800"></p>
-                                    </div>
-                                </div>
-                                <!-- Right Side: Recommendation -->
-                                <div id="result-recommendation" class="p-6 rounded-xl text-center">
-                                    <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                    <h4 id="recommendation-title" class="text-xl font-bold"></h4>
-                                    <p id="recommendation-text" class="mt-2"></p>
-                                </div>
-                            </div>
-                        </div>
+                    <!-- Analyze Button -->
+                    <div class="flex-shrink-0 pt-6">
+                        <button id="analyze-btn" class="btn-primary w-full">Analyze Record</button>
                     </div>
                 </div>
-            </div>
-        </section>
-        
-        <!-- The Team Section -->
-        <section id="team" class="py-24 bg-white">
-            <div class="container mx-auto px-6">
-                <h2 class="section-title">The Research Team</h2>
-                <p class="section-subtitle">Meet the minds behind the BeatSense project, dedicated to advancing cardiovascular health through technology.</p>
-                <div class="max-w-5xl mx-auto">
-                    <div class="grid sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-                        <div class="team-member-card">
-                            <div class="w-24 h-24 rounded-full mx-auto mb-4 bg-gray-200 flex items-center justify-center">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800">Shena Marie Espelita</h3>
-                            <p class="text-blue-600 font-medium">Project Researcher</p>
-                        </div>
-                        <div class="team-member-card">
-                             <div class="w-24 h-24 rounded-full mx-auto mb-4 bg-gray-200 flex items-center justify-center">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800">Jashley Mae Alcances</h3>
-                            <p class="text-blue-600 font-medium">Project Researcher</p>
-                        </div>
-                        <div class="team-member-card">
-                             <div class="w-24 h-24 rounded-full mx-auto mb-4 bg-gray-200 flex items-center justify-center">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800">Ylona Leigh Balahadia</h3>
-                            <p class="text-blue-600 font-medium">Project Researcher</p>
-                        </div>
-                         <div class="team-member-card">
-                             <div class="w-24 h-24 rounded-full mx-auto mb-4 bg-gray-200 flex items-center justify-center">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800">Mhekyla D. Ramirez</h3>
-                            <p class="text-blue-600 font-medium">Project Researcher</p>
-                        </div>
+                <!-- Note: The 'analysis-output' div was removed from here and combined into Section 8 -->
+            </section>
+            
+            <!-- SECTION 8: Results and Recommendation (NEW) -->
+            <section id="section-8" class="wizard-section flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Analysis Results & Recommendation</h2>
+                
+                <!-- This 'analysis-output' container is now shared by both Demo and Upload -->
+                <div id="analysis-output" class="w-full">
+                    <!-- Loading Spinner -->
+                    <div id="loading-spinner" class="text-center p-10 hidden">
+                        <svg class="animate-spin h-10 w-10 text-blue-600 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <p class="mt-4 text-lg font-medium text-gray-700">Analyzing, please wait...</p>
                     </div>
-                    <div class="text-center">
-                         <div class="inline-block team-member-card !px-10">
-                            <div class="w-24 h-24 rounded-full mx-auto mb-4 bg-green-100 flex items-center justify-center">
-                               <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004c-.03.001-.06.003-.09.005l-.07.004z" /></svg>
-                            </div>
-                            <h3 class="text-xl font-bold text-gray-800">Dr. Abid Yaya</h3>
-                            <p class="text-green-700 font-semibold">Faculty Advisor</p>
-                        </div>
+                    
+                    <!-- Error Message -->
+                    <div id="error-message" class="hidden p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                        <p><strong>Error:</strong> <span id="error-text"></span></p>
                     </div>
-                </div>
-            </div>
-        </section>
-    </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white">
-        <div class="container mx-auto px-6 py-10 text-center">
-            <h3 class="text-2xl font-bold"><span class="text-blue-400">Beat</span>Sense</h3>
-            <p class="mt-2 text-gray-400">Advancing cardiac health through signal processing.</p>
-            <div class="mt-6">
-                 <p class="text-gray-500 text-sm">Copyright &copy; 2025 - The BeatSense Project Team</p>
-            </div>
+                    <!-- Results -->
+                    <div id="results-container" class="hidden">
+                        
+                        <!-- Recommendation Panel (NEW) -->
+                        <div id="recommendation-panel" class="p-4 rounded-md mb-6 shadow">
+                            <h3 class="text-lg font-semibold mb-2 flex items-center">
+                                <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                                <span id="recommendation-title">Analysis Summary</span>
+                            </h3>
+                            <p id="recommendation-text" class="text-gray-700"></p>
+                        </div>
+                        
+                        <!-- Chart Container -->
+                        <div class="bg-gray-50 p-4 rounded-lg shadow-inner mb-6">
+                            <canvas id="ecg-chart" width="400" height="200"></canvas>
+                        </div>
+                        
+                        <!-- Stats -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                            <div class="bg-blue-100 p-4 rounded-lg">
+                                <h4 class="text-sm font-medium text-blue-800">Avg. Heart Rate</h4>
+                                <p id="bpm-display" class="text-3xl font-bold text-blue-900">--</p>
+                                <span class="text-blue-700">BPM</span>
+                            </div>
+                            <div class="bg-green-100 p-4 rounded-lg">
+                                <h4 class="text-sm font-medium text-green-800">Total Beats</h4>
+                                <p id="beats-display" class="text-3xl font-bold text-green-900">--</p>
+                                <span class="text-green-700">R-Peaks</span>
+                            </div>
+                            <div class="bg-yellow-100 p-4 rounded-lg">
+                                <h4 class="text-sm font-medium text-yellow-800">Record Length</h4>
+                                <p id="length-display" class="text-3xl font-bold text-yellow-900">--</s</p>
+                                <span class="text-yellow-700">Seconds</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Beat Classification Table -->
+                        <div class="mt-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Beat Classifications</h3>
+                            <div class="overflow-x-auto shadow rounded-lg">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-100">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Beat Type</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Symbol</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="class-table-body" class="bg-white divide-y divide-gray-200">
+                                        <!-- Rows will be injected by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Restart Button for Section 8 -->
+                <button id="restart-btn" class="btn-secondary mt-8 mx-auto">Analyze Another</button>
+                
+            </section>
+
         </div>
-    </footer>
+
+        <!-- Footer / Navigation -->
+        <footer class="p-4 bg-gray-100 border-t border-gray-200">
+            <div class="flex justify-between items-center">
+                <button id="prev-btn" class="btn-secondary" disabled>Previous</button>
+                <button id="next-btn" class="btn-primary">Next</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 
+    ====================================================================
+    JAVASCRIPT
+    ====================================================================
+    -->
+
+    <script>
+        /**
+         * ----------------------------------------------------------------
+         * /static/js/main.js (Simulated)
+         * ----------------------------------------------------------------
+         * Handles the wizard navigation, UI state, and T&C logic.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- State ---
+            let currentSection = 1;
+            let previousSection = 1; // For back-button logic from results
+            const totalSections = 8;
+            
+            // --- Elements ---
+            const sections = document.querySelectorAll('.wizard-section');
+            const nextBtn = document.getElementById('next-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const footer = nextBtn.parentElement.parentElement;
+            const progressIndicator = document.getElementById('progress-indicator');
+            const termsCheckbox = document.getElementById('terms-accept');
+            const restartBtn = document.getElementById('restart-btn');
+            const getStartedBtn = document.getElementById('get-started-btn');
+            const uploadPathBtn = document.getElementById('upload-path-btn');
+            const demoPathBtn = document.getElementById('demo-path-btn');
+
+            // --- Section Titles (for progress indicator) ---
+            const sectionTitles = [
+                "Welcome", "Introduction", "Terms & Conditions", "Choose Feature",
+                "Patient Info", "Upload File", "Demo Analysis", "Results"
+            ];
+
+            // --- Functions ---
+
+            /**
+             * Updates the UI to show the correct section and button states.
+             * @param {number} sectionNumber - The 1-based index of the section to show.
+             */
+            function updateUI(sectionNumber) {
+                if (sectionNumber < 1 || sectionNumber > totalSections) return;
+                
+                previousSection = currentSection;
+                currentSection = sectionNumber;
+                
+                // Update sections
+                sections.forEach((section, index) => {
+                    section.classList.toggle('active', index + 1 === currentSection);
+                });
+
+                // Update progress indicator
+                progressIndicator.textContent = `Step ${currentSection} of ${totalSections}: ${sectionTitles[currentSection - 1]}`;
+
+                // --- Button/Footer Visibility Logic ---
+                
+                // By default, show footer and next, hide restart
+                footer.classList.remove('hidden');
+                nextBtn.style.display = 'inline-flex';
+                restartBtn.classList.add('hidden');
+                
+                // Specific Section Logic
+                switch (currentSection) {
+                    case 1: // Welcome
+                        prevBtn.disabled = true;
+                        footer.classList.add('hidden'); // Hide footer on welcome
+                        break;
+                    case 3: // Terms
+                        prevBtn.disabled = false;
+                        nextBtn.disabled = !termsCheckbox.checked;
+                        break;
+                    case 4: // Choose Feature
+                        prevBtn.disabled = false;
+                        footer.classList.add('hidden'); // Hide footer, use in-page buttons
+                        break;
+                    case 5: // Patient Info
+                        prevBtn.disabled = false;
+                        nextBtn.disabled = false;
+                        break;
+                    case 6: // Upload File
+                        prevBtn.disabled = false;
+                        nextBtn.style.display = 'none'; // Must click "Analyze"
+                        break;
+                    case 7: // Demo Analysis
+                        prevBtn.disabled = false;
+                        nextBtn.style.display = 'none'; // Must click "Analyze"
+                        break;
+                    case 8: // Results
+                        footer.classList.add('hidden'); // Hide footer
+                        restartBtn.classList.remove('hidden'); // Show restart button
+                        break;
+                    default:
+                        prevBtn.disabled = false;
+                        nextBtn.disabled = false;
+                }
+            }
+            
+            // Expose updateUI to the global scope so analyze.js can call it
+            window.navigateToWizardSection = updateUI;
+
+            /**
+             * Handles click events for "Next" button. (Linear path)
+             */
+            function goToNext() {
+                let nextSection = currentSection + 1;
+                // Skip non-linear steps
+                if (currentSection === 3) nextSection = 4; // 3 -> 4
+                if (currentSection === 5) nextSection = 6; // 5 -> 6 (Upload path)
+                updateUI(nextSection);
+            }
+            
+            /**
+             * Handles click events for "Previous" button. (Smart logic)
+             */
+            function goToPrev() {
+                let prevSection = currentSection - 1;
+                // Handle branching
+                if (currentSection === 5) prevSection = 4; // 5 -> 4
+                if (currentSection === 7) prevSection = 4; // 7 -> 4
+                if (currentSection === 8) prevSection = previousSection; // Go back to 6 or 7
+                updateUI(prevSection);
+            }
+
+            // --- Event Listeners ---
+            
+            // Main navigation
+            nextBtn.addEventListener('click', goToNext);
+            prevBtn.addEventListener('click', goToPrev);
+            
+            // Welcome screen "Get Started" button
+            getStartedBtn.addEventListener('click', () => updateUI(2));
+
+            // T&C Checkbox
+            termsCheckbox.addEventListener('change', () => {
+                if (currentSection === 3) {
+                    nextBtn.disabled = !termsCheckbox.checked;
+                }
+            });
+            
+            // Branching buttons
+            uploadPathBtn.addEventListener('click', () => updateUI(5)); // Go to Patient Info
+            demoPathBtn.addEventListener('click', () => updateUI(7));   // Go to Demo
+
+            // Restart Button
+            restartBtn.addEventListener('click', () => {
+                termsCheckbox.checked = false;
+                updateUI(4); // Go back to "Choose Feature"
+            });
+
+            // Initial UI setup
+            updateUI(1);
+        });
+    </script>
     
     <script>
-        // DOM Elements
-        const recordSelect = document.getElementById('ecg-record-select');
-        const analyzeButton = document.getElementById('analyze-button');
-        const resultsArea = document.getElementById('results-area');
-        const loaderContainer = document.getElementById('loader-container');
-        const reportContainer = document.getElementById('report-container');
-        const chartContainer = document.getElementById('chart-container');
-
-        // Result Fields
-        const resultFileName = document.getElementById('result-file-name').querySelector('code');
-        const resultBpm = document.getElementById('result-bpm');
-        const resultRhythm = document.getElementById('result-rhythm');
-        const resultClassification = document.getElementById('result-classification');
-        const resultRecommendation = document.getElementById('result-recommendation');
-        const recommendationTitle = document.getElementById('recommendation-title');
-        const recommendationText = document.getElementById('recommendation-text');
-        
-        // --- Event Listeners ---
-        
-        recordSelect.addEventListener('change', () => {
-            if (recordSelect.value) {
-                analyzeButton.disabled = false;
-            } else {
-                analyzeButton.disabled = true;
-            }
-        });
-
-        function generateEcgChart() {
-            const chartSVG = `
-                <svg viewBox="0 0 800 300" class="w-full h-auto" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <pattern id="grid-minor" width="10" height="10" patternUnits="userSpaceOnUse">
-                            <path d="M 10 0 L 0 0 0 10" fill="none" stroke="#fecaca" stroke-width="0.5"/>
-                        </pattern>
-                        <pattern id="grid-major" width="50" height="50" patternUnits="userSpaceOnUse">
-                            <rect width="50" height="50" fill="url(#grid-minor)"/>
-                            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#fca5a5" stroke-width="1"/>
-                        </pattern>
-                    </defs>
-                    <rect width="100%" height="100%" fill="#fff7f7" />
-                    <rect width="100%" height="100%" fill="url(#grid-major)" />
-                    <path class="ecg-line" fill="none" stroke="#ef4444" stroke-width="2.5" d="M0,150 l20,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l50,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l50,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l50,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l50,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l50,0 l21,0"/>
-                </svg>
-            `;
-            chartContainer.innerHTML = chartSVG;
-        }
-
-        analyzeButton.addEventListener('click', () => {
-            // 1. Show the results area and loader
-            resultsArea.classList.remove('hidden');
-            loaderContainer.classList.remove('hidden');
-            reportContainer.classList.add('hidden');
+        /**
+         * ----------------------------------------------------------------
+         * /static/js/analyze.js (Simulated)
+         * ----------------------------------------------------------------
+         * Handles the ECG analysis, API calls, and Chart.js plotting.
+         */
+        document.addEventListener('DOMContentLoaded', () => {
             
-            // Scroll to results
-            resultsArea.scrollIntoView({ behavior: 'smooth' });
+            // --- State ---
+            let ecgChart = null; // Holds the Chart.js instance
+            let isAnalyzing = false; // Lock to prevent multiple requests
+            
+            // --- Global Elements (Now in Section 8) ---
+            const outputContainer = document.getElementById('analysis-output');
+            const spinner = document.getElementById('loading-spinner');
+            const errorMsg = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+            const resultsContainer = document.getElementById('results-container');
+            const chartCanvas = document.getElementById('ecg-chart');
+            // Stats
+            const bpmDisplay = document.getElementById('bpm-display');
+            const beatsDisplay = document.getElementById('beats-display');
+            const lengthDisplay = document.getElementById('length-display');
+            // Table
+            const classTable = document.getElementById('class-table-body');
+            // Recommendation
+            const recommendationPanel = document.getElementById('recommendation-panel');
+            const recommendationTitle = document.getElementById('recommendation-title');
+            const recommendationText = document.getElementById('recommendation-text');
 
-            // 2. Simulate analysis with a timeout
-            setTimeout(() => {
-                // Generate the chart
-                generateEcgChart();
+            // --- Section-Specific Trigger Elements ---
+            const demoRecordSelect = document.getElementById('record-select');
+            const demoAnalyzeBtn = document.getElementById('analyze-btn');
+            const uploadFileInput = document.getElementById('file-upload');
+            const uploadAnalyzeBtn = document.getElementById('upload-analyze-btn');
 
-                // 3. Generate random but realistic data for the demo
-                const recordName = recordSelect.value;
-                const fileName = `${recordName}.mat`;
-                const randomCase = Math.random();
-                let bpm, rhythm, classification, recTitle, recText, recColorClass, recTextColorClass;
+            // --- Beat Symbol Explanations ---
+            const BEAT_EXPLANATIONS = {
+                'N': 'Normal beat', 'L': 'Left bundle branch block', 'R': 'Right bundle branch block',
+                'V': 'Premature ventricular contraction', 'A': 'Atrial premature beat',
+                '/': 'Paced beat', 'f': 'Fusion of paced and normal', 'F': 'Fusion of ventricular and normal',
+                'j': 'Nodal (junctional) escape', 'E': 'Ventricular escape', 'J': 'Nodal (junctional) premature',
+                'e': 'Atrial escape', 'S': 'Supraventricular premature', 'Q': 'Unclassifiable', '?': 'Unknown'
+            };
 
-                if (randomCase < 0.33) { // Tachycardia
-                    bpm = (Math.random() * 40 + 101).toFixed(1);
-                    rhythm = "Irregular";
-                    classification = "Tachycardia";
-                    recTitle = "Recommendation";
-                    recText = "The analysis indicates a significant arrhythmia. It is strongly recommended to refer the case to a cardiologist for further evaluation.";
-                    recColorClass = 'bg-red-50 border-l-4 border-red-500';
-                    recTextColorClass = 'text-red-900';
-                    resultBpm.className = 'font-bold text-xl text-red-600';
-                    resultRhythm.className = 'font-bold text-xl text-red-600';
-                } else if (randomCase < 0.66) { // Bradycardia
-                    bpm = (Math.random() * 15 + 45).toFixed(1);
-                    rhythm = "Regular";
-                    classification = "Bradycardia";
-                    recTitle = "Recommendation";
-                    recText = "The heart rate is slower than normal. A consultation with a healthcare provider is recommended to rule out any underlying issues.";
-                    recColorClass = 'bg-yellow-50 border-l-4 border-yellow-500';
-                    recTextColorClass = 'text-yellow-900';
-                    resultBpm.className = 'font-bold text-xl text-yellow-600';
-                    resultRhythm.className = 'font-bold text-xl text-yellow-600';
-                } else { // Normal
-                    bpm = (Math.random() * 40 + 60).toFixed(1);
-                    rhythm = "Regular";
-                    classification = "Normal Sinus Rhythm";
-                    recTitle = "All Clear";
-                    recText = "The analysis indicates a normal heart rhythm within the expected range. No immediate concerns detected.";
-                    recColorClass = 'bg-green-50 border-l-4 border-green-500';
-                    recTextColorClass = 'text-green-900';
-                    resultBpm.className = 'font-bold text-xl text-green-600';
-                    resultRhythm.className = 'font-bold text-xl text-green-600';
+            // --- Functions ---
+
+            /**
+             * Resets the shared analysis UI to its initial state.
+             */
+            function resetAnalysisUI() {
+                console.log("Resetting analysis UI...");
+                
+                // Hide all output sections
+                outputContainer.classList.add('hidden');
+                spinner.classList.add('hidden');
+                errorMsg.classList.add('hidden');
+                resultsContainer.classList.add('hidden');
+                
+                // Reset text content
+                bpmDisplay.textContent = '--';
+                beatsDisplay.textContent = '--';
+                lengthDisplay.textContent = '--';
+                classTable.innerHTML = '';
+                errorText.textContent = '';
+                recommendationText.textContent = '';
+                
+                // Destroy old chart
+                if (ecgChart) {
+                    ecgChart.destroy();
+                    ecgChart = null;
                 }
                 
-                // 4. Populate the report
-                resultFileName.textContent = fileName;
-                resultBpm.innerHTML = `${bpm} <span class="text-base font-normal text-gray-600">bpm</span>`;
-                resultRhythm.textContent = rhythm;
-                resultClassification.textContent = classification;
-                recommendationTitle.textContent = recTitle;
-                recommendationText.textContent = recText;
+                // Re-enable the button and reset state
+                isAnalyzing = false;
+                demoAnalyzeBtn.disabled = false;
+                uploadAnalyzeBtn.disabled = false;
+            }
+
+            /**
+             * Sets the UI to a loading state.
+             */
+            function showLoading() {
+                isAnalyzing = true;
+                outputContainer.classList.remove('hidden');
+                spinner.classList.remove('hidden');
+                errorMsg.classList.add('hidden');
+                resultsContainer.classList.add('hidden');
+            }
+
+            /**
+             * Fetches and analyzes data from the selected MIT-BIH record.
+             */
+            async function handleDemoAnalyze() {
+                if (isAnalyzing) return;
                 
-                // Apply recommendation styling
-                resultRecommendation.className = `p-6 rounded-xl text-center ${recColorClass}`;
-                recommendationTitle.className = `text-xl font-bold ${recTextColorClass}`;
-                recommendationText.className = `mt-2 ${recTextColorClass.replace('900', '800')}`;
-                resultRecommendation.querySelector('svg').className = `w-16 h-16 mx-auto mb-4 ${recTextColorClass.replace('900', '500')}`;
+                const recordName = demoRecordSelect.value;
+                if (!recordName) {
+                    alert("Please select a record first.");
+                    return;
+                }
 
+                demoAnalyzeBtn.disabled = true;
+                showLoading();
 
-                // 5. Hide loader and show report
-                loaderContainer.classList.add('hidden');
-                reportContainer.classList.remove('hidden');
+                try {
+                    // --- SIMULATED API CALL ---
+                    console.log(`Simulating analysis for record: ${recordName}`);
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    const data = simulateAnalysisData(recordName);
+                    if (recordName === '108') throw new Error("Simulated load failure for record 108.");
+                    // --- END SIMULATION ---
+                    
+                    // const response = await fetch(`/analyze_mit?record=${recordName}`);
+                    // if (!response.ok) { ... }
+                    // const data = await response.json();
 
-            }, 2500); // Simulate a 2.5-second analysis time
-        });
+                    displayResults(data);
+                    window.navigateToWizardSection(8); // Go to results
 
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
+                } catch (error) {
+                    displayError(error.message);
+                    window.navigateToWizardSection(8); // Go to results (to show error)
+                } 
+            }
+            
+            /**
+             * Analyzes an uploaded user file.
+             */
+            async function handleUploadAnalyze() {
+                if (isAnalyzing) return;
+                
+                const file = uploadFileInput.files[0];
+                if (!file) {
+                    alert("Please select a file first.");
+                    return;
+                }
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                mobileMenu.classList.add('hidden'); // Close mobile menu on click
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
+                uploadAnalyzeBtn.disabled = true;
+                showLoading();
+                
+                const formData = new FormData();
+                formData.append('file', file);
+                // Append patient info
+                formData.append('patient_id', document.getElementById('patient-id').value);
+                formData.append('patient_age', document.getElementById('patient-age').value);
+                formData.append('patient_gender', document.getElementById('patient-gender').value);
+
+                try {
+                    // --- SIMULATED API CALL ---
+                    console.log(`Simulating analysis for file: ${file.name}`);
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    const data = simulateAnalysisData(file.name);
+                    // --- END SIMULATION ---
+                    
+                    // const response = await fetch('/analyze_file', { method: 'POST', body: formData });
+                    // if (!response.ok) { ... }
+                    // const data = await response.json();
+
+                    displayResults(data);
+                    window.navigateToWizardSection(8); // Go to results
+
+                } catch (error) {
+                    displayError(error.message);
+                    window.navigateToWizardSection(8); // Go to results (to show error)
+                }
+            }
+
+            /**
+             * Displays the analysis results in the UI.
+             * @param {object} data - The data from the API.
+             */
+            function displayResults(data) {
+                spinner.classList.add('hidden');
+                resultsContainer.classList.remove('hidden');
+
+                // Fill stats
+                bpmDisplay.textContent = data.bpm || '--';
+                beatsDisplay.textContent = data.r_peaks ? data.r_peaks.length : '--';
+                lengthDisplay.textContent = data.record_length_sec || '--';
+                
+                // Fill table
+                classTable.innerHTML = ''; // Clear old data
+                if (data.beat_counts && Object.keys(data.beat_counts).length > 0) {
+                    for (const [symbol, count] of Object.entries(data.beat_counts)) {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">${BEAT_EXPLANATIONS[symbol] || 'Unknown'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${symbol}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${count}</td>
+                        `;
+                        classTable.appendChild(row);
+                    }
+                } else {
+                    classTable.innerHTML = '<tr><td colspan="3" class="px-6 py-4 text-center text-gray-500">No classification data available.</td></tr>';
+                }
+
+                // Render chart
+                if (data.signal && data.r_peaks) {
+                    renderChart(data.signal, data.r_peaks, chartCanvas);
+                }
+                
+                // Generate Recommendation
+                generateRecommendation(data);
+            }
+            
+            /**
+             * Generates a simple recommendation based on results.
+             * @param {object} data - The data from the API.
+             */
+            function generateRecommendation(data) {
+                let title = "Analysis Complete";
+                let text = "The ECG analysis is complete. All metrics appear within normal ranges for this segment.";
+                let panelClass = "bg-green-100 border-green-200 text-green-800";
+                
+                const hasAbnormalBeats = data.beat_counts && (data.beat_counts['V'] || data.beat_counts['A']);
+                
+                if (data.bpm > 100) {
+                    title = "Tachycardia Detected (Fast Heart Rate)";
+                    text = `The average heart rate of ${data.bpm} BPM is faster than the typical 60-100 BPM range. This is for educational viewing only.`;
+                    panelClass = "bg-yellow-100 border-yellow-300 text-yellow-800";
+                } else if (data.bpm < 60) {
+                    title = "Bradycardia Detected (Slow Heart Rate)";
+                    text = `The average heart rate of ${data.bpm} BPM is slower than the typical 60-100 BPM range. This is for educational viewing only.`;
+                    panelClass = "bg-yellow-100 border-yellow-300 text-yellow-800";
+                }
+                
+                if (hasAbnormalBeats) {
+                    title = "Abnormal Beats Detected";
+                    text = `The analysis identified potential abnormal beat types (e.g., 'V' or 'A'). This is for educational viewing only.`;
+                    panelClass = "bg-red-100 border-red-300 text-red-800";
+                }
+                
+                recommendationPanel.className = `p-4 rounded-md mb-6 shadow ${panelClass}`;
+                recommendationTitle.textContent = title;
+                recommendationText.textContent = text;
+            }
+
+            /**
+             * Displays an error message in the UI.
+             * @param {string} message - The error message.
+             */
+            function displayError(message) {
+                spinner.classList.add('hidden');
+                errorMsg.classList.remove('hidden');
+                errorText.textContent = message;
+                
+                // Show error in recommendation panel
+                recommendationPanel.className = "p-4 rounded-md mb-6 shadow bg-red-100 border-red-300 text-red-800";
+                recommendationTitle.textContent = "Analysis Failed";
+                recommendationText.textContent = "Could not complete the analysis. Please check the file or try again.";
+            }
+
+            /**
+             * Renders the ECG chart using Chart.js.
+             */
+            function renderChart(signal, rPeaks, canvas) {
+                if (ecgChart) ecgChart.destroy();
+                const ctx = canvas.getContext('2d');
+                const rPeakData = rPeaks.map(index => ({ x: index, y: signal[index] }));
+                const labels = Array.from({ length: signal.length }, (_, i) => i);
+
+                ecgChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'ECG Signal', data: signal, borderColor: 'rgb(59, 130, 246)',
+                                borderWidth: 1.5, pointRadius: 0, tension: 0.1
+                            },
+                            {
+                                type: 'scatter', label: 'R-Peaks', data: rPeakData,
+                                backgroundColor: 'rgb(239, 68, 68)', pointRadius: 5
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: true, animation: false,
+                        scales: {
+                            x: { title: { display: true, text: 'Sample Index' }, ticks: { maxTicksLimit: 20 } },
+                            y: { title: { display: true, text: 'Amplitude (mV)' } }
+                        },
+                        plugins: { legend: { position: 'top' }, tooltip: { enabled: true, mode: 'index', intersect: false } },
+                        interaction: { mode: 'nearest', axis: 'x', intersect: false }
+                    }
                 });
-            });
+            }
+            
+            // --- SIMULATION FUNCTION ---
+            function simulateAnalysisData(recordName) {
+                const signalLength = 3000;
+                const signal = [];
+                const rPeaks = [];
+                for (let i = 0; i < signalLength; i++) {
+                    let y = Math.sin(i / 20) * 0.5;
+                    if (i % 300 === 0) {
+                        y = 2.5; rPeaks.push(i); signal.push(y);
+                        signal.push(0.5); i++; signal.push(-1.5); i++; signal.push(0.2); i++;
+                    } else {
+                        signal.push(y + (Math.random() - 0.5) * 0.1);
+                    }
+                }
+                const beat_counts = {'N': 8, 'V': 2};
+                if (recordName.includes('101')) {
+                    beat_counts['V'] = 0; // Simulate a "normal" record
+                }
+                return {
+                    record_name: recordName, bpm: recordName.includes('101') ? 72 : 95, r_peaks: rPeaks,
+                    signal: signal.slice(0, 3000), record_length_sec: (signalLength / 360).toFixed(1),
+                    beat_counts: beat_counts
+                };
+            }
+
+            // --- Event Listeners ---
+            
+            // Reset UI when a new selection is made
+            demoRecordSelect.addEventListener('change', resetAnalysisUI);
+            uploadFileInput.addEventListener('change', resetAnalysisUI);
+
+            // Analyze button clicks
+            demoAnalyzeBtn.addEventListener('click', handleDemoAnalyze);
+            uploadAnalyzeBtn.addEventListener('click', handleUploadAnalyze);
         });
     </script>
 </body>
 </html>
-
