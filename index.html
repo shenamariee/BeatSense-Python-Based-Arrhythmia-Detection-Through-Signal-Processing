@@ -1,0 +1,215 @@
+// --- *** FULLY FIXED & FUNCTIONAL SCRIPT (with Backend) *** ---
+// JavaScript for mobile menu toggle
+const mobileMenuButton = document.getElementById('mobile-menu-button');
+const mobileMenu = document.getElementById('mobile-menu');
+mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+
+// JavaScript for smooth scrolling
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', e => {
+    e.preventDefault();
+    if (!mobileMenu.classList.contains('hidden')) mobileMenu.classList.add('hidden');
+    const targetElement = document.querySelector(anchor.getAttribute('href'));
+    if (targetElement) targetElement.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+// --- Demo Interaction Logic ---
+
+// DOM elements
+const recordSelect = document.getElementById('ecg-record-select');
+const analyzeButton = document.getElementById('analyze-button');
+const resultsArea = document.getElementById('results-area');
+const loaderContainer = document.getElementById('loader-container');
+const reportContainer = document.getElementById('report-container');
+const chartContainer = document.getElementById('chart-container');
+const resultFileName = document.getElementById('result-file-name').querySelector('code');
+const resultBpm = document.getElementById('result-bpm');
+const resultRhythm = document.getElementById('result-rhythm');
+const resultClassification = document.getElementById('result-classification');
+const resultRecommendation = document.getElementById('result-recommendation');
+const recommendationTitle = document.getElementById('recommendation-title');
+const recommendationText = document.getElementById('recommendation-text');
+const uploadAnalyzeButton = document.getElementById('upload-analyze-button');
+const ecgUpload = document.getElementById('ecg-upload');
+const uploadFeedback = document.getElementById('upload-feedback');
+const uploadSpanText = document.getElementById('upload-span-text');
+
+// User info form elements
+const userNameInput = document.getElementById('user-name');
+const userAgeInput = document.getElementById('user-age');
+const userGenderSelect = document.getElementById('user-gender');
+const subjectValuesEl = document.getElementById('subject-values');
+
+// Waveform paths
+const waveformPaths = {
+  normal: "M0,150 l20,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l50,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l50,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l50,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l50,0 l85,0",
+  tachy: "M0,150 l10,0 q5,-30 8,0 t8,0 l4,15 l5,-70 l5,110 l5,-40 q8,12 15,0 t15,0 l20,0 q5,-30 8,0 t8,0 l4,15 l5,-70 l5,110 l5,-40 q8,12 15,0 t15,0 l20,0 q5,-30 8,0 t8,0 l4,15 l5,-70 l5,110 l5,-40 q8,12 15,0 t15,0 l20,0 q5,-30 8,0 t8,0 l4,15 l5,-70 l5,110 l5,-40 q8,12 15,0 t15,0 l20,0 q5,-30 8,0 t8,0 l4,15 l5,-70 l5,110 l5,-40 q8,12 15,0 t15,0 l50,0",
+  brady: "M0,150 l50,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l100,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l100,0 q5,-20 10,0 t10,0 l5,10 l8,-50 l8,100 l8,-55 q10,15 20,0 t20,0 l100,0 l150,0"
+};
+
+// --- Function to draw animated waveform ---
+function drawWaveform(type = 'normal') {
+  const pathData = waveformPaths[type] || waveformPaths.normal;
+  const color = (type === 'normal') ? '#16a34a' : (type === 'brady') ? '#ca8a04' : '#dc2626';
+  chartContainer.innerHTML = '';
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("viewBox", "0 0 700 300");
+  svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
+  svg.setAttribute("class", "w-full h-auto");
+  const path = document.createElementNS(svgNS, "path");
+  path.setAttribute("d", pathData);
+  path.setAttribute("fill", "none");
+  path.setAttribute("stroke", color);
+  path.setAttribute("stroke-width", "4");
+  path.setAttribute("class", "ecg-line-animated");
+  svg.appendChild(path);
+  chartContainer.appendChild(svg);
+}
+
+// --- Function to set recommendation box style ---
+function setRecommendation(type = 'normal') {
+  resultRecommendation.className = 'p-6 rounded-xl text-center';
+  recommendationTitle.className = 'text-xl font-bold';
+  let title, text, boxClass, titleClass;
+  if (type === 'normal') {
+    title = "Normal Sinus Rhythm";
+    text = "The analysis indicates a normal heart rate and rhythm. No immediate concerns detected.";
+    boxClass = 'bg-green-100 border-green-300';
+    titleClass = 'text-green-800';
+  } else if (type === 'brady') {
+    title = "Potential Bradycardia";
+    text = "The heart rate is below 60 BPM. This can be normal for athletes, but may warrant follow-up if accompanied by symptoms like dizziness.";
+    boxClass = 'bg-yellow-100 border-yellow-300';
+    titleClass = 'text-yellow-800';
+  } else { // 'tachy'
+    title = "Potential Tachycardia / Arrhythmia";
+    text = "The analysis shows a high heart rate or significant irregularity. This is an educational demo; consult a medical professional for diagnosis.";
+    boxClass = 'bg-red-100 border-red-300';
+    titleClass = 'text-red-800';
+  }
+  resultRecommendation.classList.add(boxClass);
+  recommendationTitle.classList.add(titleClass);
+  recommendationTitle.textContent = title;
+  recommendationText.textContent = text;
+}
+
+// --- Function to populate the report card ---
+function populateReport(fileName, data) {
+  let userName = userNameInput.value.trim();
+  let userAge = userAgeInput.value.trim();
+  let userGender = userGenderSelect.value;
+  let subjectInfo = [];
+  if (userName) subjectInfo.push(userName);
+  if (userAge) subjectInfo.push(`${userAge} yrs`);
+  if (userGender) subjectInfo.push(userGender);
+  subjectValuesEl.textContent = subjectInfo.length > 0 ? subjectInfo.join(' / ') : 'Anonymous';
+
+  resultFileName.textContent = fileName;
+  resultBpm.textContent = `${data.bpm.toFixed(1)} BPM`;
+  resultRhythm.textContent = data.rhythm;
+  resultClassification.textContent = data.classification;
+  
+  setRecommendation(data.type);
+  drawWaveform(data.type);
+}
+
+// --- Main analysis function ---
+function showAnalysis(fileName, data) {
+  resultsArea.classList.remove('hidden');
+  loaderContainer.classList.add('hidden');
+  reportContainer.classList.add('hidden');
+  
+  populateReport(fileName, data);
+  
+  reportContainer.classList.remove('hidden');
+  resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function showLoader() {
+  resultsArea.classList.remove('hidden');
+  loaderContainer.classList.remove('hidden');
+  reportContainer.classList.add('hidden');
+  resultsArea.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// --- Event Listeners ---
+
+// 1. For MIT-BIH Demo
+recordSelect.addEventListener('change', () => {
+  analyzeButton.disabled = !recordSelect.value;
+});
+
+analyzeButton.addEventListener('click', () => {
+  const selectedRecordId = recordSelect.value;
+  if (!selectedRecordId) return;
+
+  showLoader();
+  analyzeButton.disabled = true;
+  analyzeButton.textContent = "Analyzing...";
+
+  // This is the new part: call the backend!
+  fetch('http://127.0.0.1:5000/analyze-mit', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ record_name: selectedRecordId }),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    // We got a REAL result from our Python code
+    showAnalysis(`Record ${selectedRecordId}`, data);
+  })
+  .catch(error => {
+    console.error("Error calling backend:", error);
+    alert("Could not connect to the BeatSense analysis server. Please make sure the 'app.py' script is running.");
+    loaderContainer.classList.add('hidden');
+  })
+  .finally(() => {
+    // Re-enable the button
+    analyzeButton.disabled = false;
+    analyzeButton.textContent = "Show Analysis";
+  });
+});
+
+// 2. For Upload Demo (This is still simulated, as handling
+//    raw file uploads is much more complex)
+ecgUpload.addEventListener('change', () => {
+  if (ecgUpload.files.length > 0) {
+    const fileName = ecgUpload.files[0].name;
+    uploadSpanText.textContent = fileName;
+    uploadFeedback.textContent = `File "${fileName}" selected.`;
+    uploadAnalyzeButton.disabled = false;
+  } else {
+    uploadSpanText.innerHTML = 'Click to select or drag your <span class="underline decoration-blue-600">ECG file</span> here';
+    uploadFeedback.textContent = '';
+    uploadAnalyzeButton.disabled = true;
+  }
+});
+
+uploadAnalyzeButton.addEventListener('click', () => {
+  if (ecgUpload.files.length > 0) {
+    const fileName = ecgUpload.files[0].name;
+    
+    // For now, we will show a "simulation" message.
+    // Making this button work for real requires a more complex backend.
+    showLoader();
+    setTimeout(() => {
+      const simulatedData = {
+          bpm: 88.0,
+          rhythm: "Simulated Regular",
+          classification: "Analysis of custom files is not yet supported in this demo.",
+          type: "normal"
+      };
+      showAnalysis(fileName, simulatedData);
+      uploadFeedback.textContent = 'Simulated analysis complete.';
+    }, 1500);
+  }
+});
